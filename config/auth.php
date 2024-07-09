@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'sanctum',
+        'passwords' => 'admins',
     ],
 
     /*
@@ -40,6 +40,21 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'admin' => [
+            'driver' => 'sanctum',
+            'provider' => 'admins',
+        ],
+
+        'creator' => [
+            'driver' => 'sanctum',
+            'provider' => 'creators',
+        ],
+
+        'brand' => [
+            'driver' => 'sanctum',
+            'provider' => 'brands',
+        ],
     ],
 
     /*
@@ -63,6 +78,19 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'Admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
+        'creators' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Creator::class,
+        ],
+
+        'brands' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Brand::class,
         ],
 
         // 'users' => [

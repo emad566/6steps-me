@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+
+        Validator::extend('sa_mobile', function ($attribute, $value, $parameters, $validator) {
+            return preg_match('/^(966|\\+966|0)?5[0-9]{8}$/', $value);
+        });
+
+        Validator::replacer('sa_mobile', function ($message, $attribute, $rule, $parameters) {
+            return 'mobile is not a valid Saudi Arabia mobile number.';
+        });
+
 
         Builder::macro('betweenEqual', function ($field, $array) {
             return $this->where($field, '>=', $array[0])

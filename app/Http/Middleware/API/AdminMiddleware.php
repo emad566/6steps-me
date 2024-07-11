@@ -2,11 +2,13 @@
 
 namespace App\Http\Middleware\API;
 
+use App\Http\Controllers\API\BaseApiController;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class AdminMiddleware extends BaseApiController
 {
     /**
      * Handle an incoming request.
@@ -15,6 +17,10 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        if (auth('admin')->check()) {
+            return $next($request);
+        } else {
+            return $this->sendResponse(false, [], "You are not admin user");
+        }
     }
 }

@@ -2,11 +2,12 @@
 
 namespace App\Http\Middleware\API;
 
+use App\Http\Controllers\API\BaseApiController;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class BrandMiddleware
+class BrandMiddleware extends BaseApiController
 {
     /**
      * Handle an incoming request.
@@ -15,6 +16,10 @@ class BrandMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        if (auth('brand')->check()) {
+            return $next($request);
+        } else {
+            return $this->sendResponse(false, [], "You are not brand user");
+        }
     }
 }

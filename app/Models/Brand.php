@@ -3,24 +3,46 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class Brand extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, SoftDeletes, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
+
+    protected $table = 'brands';
+    protected $primaryKey = 'brand_id';
+
     protected $fillable = [
-        'name',
+        'brand_id',
+        'brand_name',
+        'mobile',
         'email',
+        'email_verified_at',
+        'otp',
+        'otp_created_at',
         'password',
+        'logo',
+        'cat_id',
+        'website_url',
+        'description',
+        'address',
+        'branches_no',
+        'tax_no',
+        'cr_no',
+
+        'deleted_at',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -30,7 +52,6 @@ class Brand extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -42,4 +63,9 @@ class Brand extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
+    }
 }

@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Creator\Auth\CreatorAuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('test', function () {
-    return 'creators';
-});
+Route::put('updateProfile/{id}', [CreatorAuthController::class, 'updateProfile']);

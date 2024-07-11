@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\Auth\AdminAuthController;
+use App\Http\Controllers\Brand\Auth\BrandAuthController;
+use App\Http\Controllers\Creator\Auth\CreatorAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'admin'], function () {
+    Route::post('register', [AdminAuthController::class, 'register']);
+    Route::post('login', [AdminAuthController::class, 'login']);
 });
+
+Route::group(['prefix' => 'creator'], function () {
+    Route::post('loginRegisterResendOtp', [CreatorAuthController::class, 'loginRegisterResendOtp']);
+    Route::post('otpVerify', [CreatorAuthController::class, 'otpVerify']);
+});
+

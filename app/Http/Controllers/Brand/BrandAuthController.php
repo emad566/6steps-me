@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Brand\Auth;
+namespace App\Http\Controllers\Brand;
 
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Controllers\Controller;
@@ -11,5 +11,5 @@ use Illuminate\Support\Facades\Hash;
 
 class BrandAuthController extends BaseApiController
 {
-    
+
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\CatController;
 use App\Http\Controllers\API\FileController;
 use App\Http\Controllers\Brand\BrandAuthController;
 use App\Http\Controllers\Creator\CreatorAuthController;
@@ -18,12 +19,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'admin'], function () {
-    Route::post('login', [AdminAuthController::class, 'login']);
-});
 
-Route::group(['prefix' => 'creator'], function () {
-    Route::post('loginRegisterResendOtp', [CreatorAuthController::class, 'loginRegisterResendOtp']);
-    Route::post('otpVerify', [CreatorAuthController::class, 'otpVerify']);
-});
+// Start::Files ===================================================== //
+Route::post('uploadFile', [FileController::class, 'uploadFile']);
+Route::Delete('deleteFile', [FileController::class, 'deleteFile']);
+// Start::Files ===================================================== //
+
+// Start::Category ===================================================== //
+Route::get('cats', [CatController::class, 'index']);
+// Start::Category ===================================================== //
 

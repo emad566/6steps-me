@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('catables', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('cat_id')->unsigned();
+            $table->bigInteger('cat_cat_id')->unsigned();
             $table->bigInteger('catable_id')->unsigned();
-            $table->bigInteger('catable_type')->unsigned();
+            $table->string('catable_type')->unsigned();
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();

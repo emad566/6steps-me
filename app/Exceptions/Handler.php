@@ -42,4 +42,14 @@ class Handler extends ExceptionHandler
         // Customize the redirect route here
         return redirect()->guest('login');
     }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            $baseApiController = new BaseApiController();
+            return $baseApiController->sendResponse(false, [], 'The url ' . $request->url() . ' could not be found.', [], 404);
+        }
+
+        return parent::render($request, $exception);
+    }
 }

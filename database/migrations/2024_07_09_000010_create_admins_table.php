@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Admin;
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,6 +24,14 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
+
+        Admin::create([
+            'email' => 'admin@6stepsa.com',
+            'password' => '123456',
+            'mobile' => '01021838680',
+            'admin_name' => '6stepsa',
+            'email_verified_at' => Carbon::now(),
+        ]);
     }
 
     /**

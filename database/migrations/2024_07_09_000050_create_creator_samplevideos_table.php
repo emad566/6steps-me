@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('creator_id')->unsigned();
             $table->string('video_url');
             $table->integer('video_order_no')->default(1);
-            $table->string('video_image_url')->nullable();
+            $table->string('video_image_path')->nullable();
             $table->text('video_description', 500)->nullable();
 
             $table->timestamp('created_at')->useCurrent();

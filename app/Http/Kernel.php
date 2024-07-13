@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\API\AdminMiddleware::class,
         'creator' => \App\Http\Middleware\API\CreatorMiddleware::class,
         'brand' => \App\Http\Middleware\API\BrandMiddleware::class,
+        'localization' => \App\Http\Middleware\API\ApiLocalization::class,
     ];
 }

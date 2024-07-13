@@ -24,6 +24,8 @@ class CreatorResource extends JsonResource
             'IBAN_no' => $this->IBAN_no,
             'Mawthooq_no' => $this->Mawthooq_no,
             'brith_date' => $this->brith_date,
+            'sampleVideos' =>   CreatorSampleVidepResource::collection($this->sampleVideos->sortByDesc('video_order_no'))->response()->getData(true)['data'] ?? [],
+            'cats' =>   $this->cats->pluck('cat_name')->toArray(),
 
             'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,

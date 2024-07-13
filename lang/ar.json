@@ -1,0 +1,17 @@
+{
+    "technicalError": "خطأ فني!",
+    "disabledAccount": "تم تعطيل الحساب. الرجاء الاتصال بنا لحل المشكلة",
+    "tryAgainAfter": "الرجاء الانتظار :seconds ثانية، ثم حاول مرة أخرى",
+    "otpHasBeenSentToYourMobile": "تم إرسال رمز OTP إلى هاتفك المحمول",
+    "otpHasBeenExpired": "انتهت صلاحية رمز OTP!",
+    "invalidOtp": "OTP غير صالح",
+    "successfullLogin": "تم تسجيل الدخول بنجاح",
+    "and": " و ",
+    "moreValidation": "  ",
+    "successfullUpload": "تم رفع الملف",
+    "successfullDelete": "تم الحذف",
+    "successfullUpdate": "تم التحديث",
+    "inActiveAccount": "حساب معطل",
+    "Listed": "تم جلب البيانات",
+    "CategoryHasBeenCreated": "تم انشاء القائمة"
+}

@@ -2,31 +2,10 @@
 
 use App\Models\AccessToken;
 use App\Models\User;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Http\Response;
-
-use Illuminate\Support\HtmlString;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Kutia\Larafirebase\Facades\Larafirebase;
+use Illuminate\Support\Facades\Storage;
 
-define('PAGINATION_COUNT', 10);
-
-function zid_header(string $lang = 'ar'): array{
-    $user = User::where('role_type', 'Admin')->first();
-    return [
-        'Accept' => 'application/json',
-        'Accept-Language' => $lang,
-        'Access-Token' => $user->managerToken,
-        'Authorization' => 'Bearer ' . $user->authToken,
-        'Store-Id' =>  app('currentTenant')->merchant_id,
-    ];
-}
-
-function msgNumberHandler($msg){ 
-    if($msg == null || $msg == 1) return ''; 
-    return $msg;
-}
 
 
 function generateRandomPassword($length = 8) {
@@ -62,28 +41,7 @@ function generateRandomStringId($length = 8) {
     return $id . '-' . substr(str_shuffle($chars), 0, $length) . '-' . substr(str_shuffle($chars), 0, $length) . '-' . substr(str_shuffle($chars), 0, $length);
 }
 
-function apiResponse($status, $msg, $data="", $arrData=[]){
-    $response = [
-        'status'=> $status,
-        'msg'=> $msg,
-        'message'=> $msg,
-    ];
 
-    foreach ($arrData as $key => $value) {
-        $response[$key] = $value;
-    }
-
-    $response ['data'] = $data ;
-
-    return response()->json($response);
-}
-
-function checkValidator($validator)
-{
-    if($validator->fails()){
-        return apiResponse(0, 'Not Valid data', [], ['errors'=>$validator->errors()]);
-    }else return false;
-}
 
 function delete_img($img_path){
     if (file_exists($img_path)) {
@@ -94,12 +52,6 @@ function delete_img($img_path){
 }
 
 
-function image_name($image, $image_name='', $size='')
-{
-    $size = ($size) ? '-'.$size : '';
-    $image_name = ($image_name) ? $image_name : hexdec(uniqid());
-    return $image_name . $size . '.' . $image->getClientOriginalExtension();
-}
 
 function getSrc($edit, $name)
 {
@@ -188,3 +140,185 @@ function sendNotification($data, $user_ids)
     //     return apiResponse(0, 'NO Notification Sent!!');
     // }
 }
+
+
+/**
+ * Base Url For Image From Dashboard Project
+ */
+if (!function_exists('FileBaseURl')) {
+    function FileBaseURl($file)
+    {
+        if ($file) {
+            return env('APP_FILE_URL') . $file;
+        }
+    }
+}
+
+
+if (!function_exists('convertToMinutes')) {
+    function convertToMinutes($second)
+    {
+        if ($second == 0) {
+            return 0;
+        }
+        $second = $second / 60;
+        return round($second, 2, PHP_ROUND_HALF_UP);
+    }
+}
+
+if (!function_exists('convertToKM')) {
+    function convertToKm($meter)
+    {
+        if ($meter == 0) {
+            return 0;
+        }
+        $meter = $meter / 1000;
+        return round($meter, 2, PHP_ROUND_HALF_UP);
+    }
+}
+
+
+
+
+/**
+ * Get list of languages
+ */
+
+if (!function_exists('languages')) {
+    function languages()
+    {
+        $languages = Language::all();
+        return $languages;
+    }
+}
+/**
+ * upload64
+ */
+if (!function_exists('upload64')) {
+    function upload64($file, $path)
+    {
+        $baseDir = 'uploads/' . $path;
+
+        $name = sha1(time() . $file->getClientOriginalName());
+        $extension = $file->getClientOriginalExtension();
+        $fileName = "{$name}.{$extension}";
+
+        $file->move(public_path() . '/' . $baseDir, $fileName);
+
+        return "{$baseDir}/{$fileName}";
+    }
+}
+/**
+ * Upload
+ */
+if (!function_exists('upload')) {
+    function upload($file, $path)
+    {
+        $baseDir = 'uploads/' . $path;
+
+        $name = sha1(time() . $file->getClientOriginalName());
+        $extension = $file->getClientOriginalExtension();
+        $fileName = "{$name}.{$extension}";
+
+        $file->move(public_path() . '/' . $baseDir, $fileName);
+
+        return "{$baseDir}/{$fileName}";
+    }
+}
+/**
+ * Upload Storage
+ */
+if (!function_exists('uploadToStorage')) {
+    function uploadToStorage($file, $path)
+    {
+        $baseDir = 'public/' . $path;
+
+        $name = sha1(time() . $file->getClientOriginalName());
+        $extension = $file->getClientOriginalExtension();
+
+        $fileName = "{$name}.{$extension}";
+
+        Storage::disk('local')->putFileAs($baseDir, $file, $fileName, 'public');
+
+        return [
+            'relativePath' => "{$path}/{$fileName}",
+            'absolutePath' => asset('storage/' . $path . '/' . $fileName),
+        ];
+    }
+}
+/**
+ * Upload Storage
+ */
+if (!function_exists('uploadStorage')) {
+    function uploadStorage($file, $name, $path)
+    {
+        $baseDir = 'public/' . $path;
+        $extension = $file->getClientOriginalExtension();
+        $fileName = "{$name}.{$extension}";
+        Storage::disk('local')->putFileAs($baseDir, $file, $fileName, 'public');
+        return "{$path}/{$fileName}";
+    }
+}
+
+
+
+/**
+ * Generate random Color
+ */
+if (!function_exists('random_color_part')) {
+    function random_color_part()
+    {
+        return str_pad(dechex(mt_rand(0, 255)), 2, '0', STR_PAD_LEFT);
+    }
+}
+
+if (!function_exists('generateRandomColor')) {
+    function generateRandomColor()
+    {
+        return  random_color_part() . random_color_part() . random_color_part();
+    }
+}
+
+
+/**
+ * Round Amount
+ */
+if (!function_exists('roundAmount')) {
+    function roundAmount($amount)
+    {
+        return round($amount, 2, PHP_ROUND_HALF_UP);
+    }
+}
+/**
+ * Round Amount Down
+ */
+if (!function_exists('roundAmountDown')) {
+    function roundAmountDown($amount)
+    {
+        return number_format($amount, 2, '.', '');
+    }
+}
+
+/**
+ * Get Distance By Lat,Lng
+ */
+if (!function_exists('getDistanceByLatLng')) {
+    function getDistanceByLatLng($latFrom, $lngFrom, $latTo, $lngTo)
+    {
+        $latFrom = deg2rad($latFrom);
+        $lngFrom = deg2rad($lngFrom);
+        $latTo = deg2rad($latTo);
+        $lngTo = deg2rad($lngTo);
+
+        $latDelta = $latTo - $latFrom;
+        $lngDelta = $lngTo - $lngFrom;
+
+        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) + cos($latFrom) * cos($latTo) * pow(sin($lngDelta / 2), 2)));
+        return array(
+            'success' => true,
+            'distanceValue' => $angle * 6371000,
+            'distance' => $angle * 6371000,
+        );
+    }
+}
+

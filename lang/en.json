@@ -1,0 +1,19 @@
+{
+    "technicalError": "Technical Error!",
+    "disabledAccount": "The account is disabled. Please contact us to solve the problem",
+    "tryAgainAfter": "Please wait :seconds seconds, then try again",
+    "otpHasBeenSentToYourMobile": "OTP has been sent to your mobile",
+    "otpHasBeenExpired": "OTP has been expired!",
+    "invalidOtp": "Invalid OTP",
+    "successfullLogin": "Successfull login",
+    "and": " and ",
+    "moreValidation": " more ",
+
+
+    "successfullUpload": "Successfull upload",
+    "successfullDelete": "Successfull Delete",
+    "successfullUpdate": "Successfull Update",
+    "inActiveAccount": "In active account",
+    "Listed": "Listed",
+    "CategoryHasBeenCreated": "Category has been created"
+}

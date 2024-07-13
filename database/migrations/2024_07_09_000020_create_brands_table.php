@@ -21,7 +21,6 @@ return new class extends Migration
             $table->timestamp('otp_created_at')->nullable();
             $table->string('password')->nullable();
             $table->string('logo')->nullable();
-            $table->string('cat_id')->nullable();
             $table->string('website_url')->nullable();
             $table->text('description', 500)->nullable();
             $table->string('address')->nullable();

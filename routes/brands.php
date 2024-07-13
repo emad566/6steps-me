@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Brand\BrandAuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('test', function () {
-    return 'brands';
-});
+Route::put('updateProfile/{id}', [BrandAuthController::class, 'updateProfile']);

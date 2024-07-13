@@ -27,3 +27,7 @@ Route::group(['prefix' => 'creator'], function () {
     Route::post('otpVerify', [CreatorAuthController::class, 'otpVerify']);
 });
 
+Route::group(['prefix' => 'brand'], function () {
+    Route::post('loginRegisterResendOtp', [BrandAuthController::class, 'loginRegisterResendOtp']);
+    Route::post('otpVerify', [BrandAuthController::class, 'otpVerify']);
+});

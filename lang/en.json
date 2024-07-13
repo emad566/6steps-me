@@ -15,5 +15,6 @@
     "successfullUpdate": "Successfull Update",
     "inActiveAccount": "In active account",
     "Listed": "Listed",
-    "CategoryHasBeenCreated": "Category has been created"
+    "CategoryHasBeenCreated": "Category has been created",
+    "NotValidEmail": "Not valid email"
 }

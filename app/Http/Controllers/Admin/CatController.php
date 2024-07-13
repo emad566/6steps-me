@@ -18,7 +18,7 @@ class CatController extends BaseApiController
      */
     public function index(Request $request)
     {
-        // try {
+        try {
             $validator = Validator::make($request->all(), [
                 ...AppConstants::$listVaidations,
                 'sortColumn' => 'nullable|in:cat_name,cat_id'
@@ -46,9 +46,9 @@ class CatController extends BaseApiController
 
             $items = $items->paginate($request->paginationCounter ?? AppConstants::$PerPage);
             return $this->sendResponse(true, data: ['items' => CatResource::collection($items)->response()->getData(true)], message: trans('Listed'));
-        // } catch (\Throwable $th) {
-        //     return $this->sendResponse(false, null, trans('technicalError'));
-        // }
+        } catch (\Throwable $th) {
+            return $this->sendResponse(false, null, trans('technicalError'));
+        }
     }
 
     /**
@@ -141,7 +141,7 @@ class CatController extends BaseApiController
      */
     public function update(Request $request, $id)
     {
-        // try {
+        try {
             $validator = Validator::make([...$request->all(), 'cat_id' => $id], [
                 'cat_id' => 'required|exists:cats,cat_id',
                 'cat_name' => 'required|unique:cats,cat_name,' . $id . ',cat_id',
@@ -157,9 +157,9 @@ class CatController extends BaseApiController
             return $this->sendResponse(true, [
                 'item' => new CatResource($item),
             ], trans('successfullUpdate'), null);
-        // } catch (\Throwable $th) {
-        //     return $this->sendResponse(false, null, trans('technicalError'));
-        // }
+        } catch (\Throwable $th) {
+            return $this->sendResponse(false, null, trans('technicalError'));
+        }
     }
 
     /**
@@ -167,7 +167,7 @@ class CatController extends BaseApiController
      */
     public function destroy($id)
     {
-        // try {
+        try {
             $validator = Validator::make(['cat_id' => $id], [
                 'cat_id' => 'required|exists:cats,cat_id'
             ]);
@@ -182,9 +182,9 @@ class CatController extends BaseApiController
             return $this->sendResponse(true, [
                 'item' => new CatResource($oldItem),
             ], trans('successfullDelete'), null);
-        // } catch (\Throwable $th) {
-        //     return $this->sendResponse(false, null, trans('technicalError'));
-        // }
+        } catch (\Throwable $th) {
+            return $this->sendResponse(false, null, trans('technicalError'));
+        }
     }
 
     /**
@@ -192,7 +192,7 @@ class CatController extends BaseApiController
      */
     public function toggleActive($id)
     {
-        // try {
+        try {
             $validator = Validator::make(['cat_id' => $id], [
                 'cat_id' => 'required|exists:cats,cat_id'
             ]);
@@ -207,8 +207,8 @@ class CatController extends BaseApiController
                 'item' => new CatResource($item),
             ], trans('successfullUpdate'), null);
 
-        // } catch (\Throwable $th) {
-        //     return $this->sendResponse(false, null, trans('technicalError'));
-        // }
+        } catch (\Throwable $th) {
+            return $this->sendResponse(false, null, trans('technicalError'));
+        }
     }
 }

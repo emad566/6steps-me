@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('cat_cat_id')->unsigned();
             $table->bigInteger('catable_id')->unsigned();
-            $table->string('catable_type')->unsigned();
+            $table->string('catable_type');
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();

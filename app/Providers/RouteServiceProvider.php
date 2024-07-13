@@ -31,20 +31,21 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
 
 
-            Route::middleware(['localization', 'auth:sanctum', 'brand'])
-                ->prefix('brand')
-                ->group(base_path('routes/brands.php'));
 
             Route::middleware(['localization', 'auth:sanctum', 'admin'])
                 ->prefix('admin')
                 ->group(base_path('routes/admins.php'));
+
+            Route::middleware(['localization', 'auth:sanctum', 'brand'])
+                ->prefix('brand')
+                ->group(base_path('routes/brands.php'));
 
             Route::middleware(['localization', 'auth:sanctum', 'creator'])
                 ->prefix('creator')
                 ->group(base_path('routes/creators.php'));
 
             Route::middleware(['localization', 'auth:sanctum'])
-            ->prefix('authed')
+                ->prefix('authed')
                 ->group(base_path('routes/authed.php'));
 
             Route::middleware(['localization', 'api'])

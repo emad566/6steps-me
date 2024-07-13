@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Http\Traits\CreatedUpdatedFormat;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Brand extends Authenticatable
 {
-    use HasApiTokens, SoftDeletes, Notifiable;
+    use HasApiTokens, SoftDeletes, CreatedUpdatedFormat, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -32,7 +34,6 @@ class Brand extends Authenticatable
         'otp_created_at',
         'password',
         'logo',
-        'cat_id',
         'website_url',
         'description',
         'address',
@@ -67,5 +68,10 @@ class Brand extends Authenticatable
     public function setEmailAttribute($value)
     {
         $this->attributes['email'] = strtolower($value);
+    }
+
+    public function cats(): MorphToMany
+    {
+        return $this->morphToMany(Cat::class, 'catable');
     }
 }

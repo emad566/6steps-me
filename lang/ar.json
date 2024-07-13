@@ -13,5 +13,6 @@
     "successfullUpdate": "تم التحديث",
     "inActiveAccount": "حساب معطل",
     "Listed": "تم جلب البيانات",
-    "CategoryHasBeenCreated": "تم انشاء القائمة"
+    "CategoryHasBeenCreated": "تم انشاء القائمة",
+    "NotValidEmail": "بريد الكتروني غير موثوق"
 }

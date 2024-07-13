@@ -33,4 +33,9 @@ class Catable extends Authenticatable
     {
         return $this->morphedByMany(Creator::class, 'catable');
     }
+
+    public function brands(): MorphToMany
+    {
+        return $this->morphedByMany(Brand::class, 'catable');
+    }
 }

@@ -120,7 +120,7 @@ function getAttr($obj, $child, $attr)
 
 function sendNotification($data, $user_ids)
 {
-    // try{
+    try{
         $device_tokens = AccessToken::whereIn('tokenable_id', $user_ids)->where('tokenable_id', '<>', Auth::id())->groupby('device_token')->pluck('device_token')->toArray();
 
         Larafirebase::withTitle($data['title'])
@@ -135,10 +135,10 @@ function sendNotification($data, $user_ids)
 
             return $device_tokens;
 
-    // }catch(\Exception $e){
-    //     report($e);
-    //     return apiResponse(0, 'NO Notification Sent!!');
-    // }
+    }catch(\Exception $e){
+        report($e);
+        return apiResponse(0, 'NO Notification Sent!!');
+    }
 }
 
 

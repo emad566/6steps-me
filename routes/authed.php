@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\CatController;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\API\FileController;
 use App\Http\Controllers\Brand\BrandAuthController;
 use App\Http\Controllers\Brand\BrandController;
@@ -37,5 +38,9 @@ Route::get('creators/{id}', [CreatorController::class, 'show']);
 
 // Start::Category ===================================================== //
 Route::get('cats', [CatController::class, 'index']);
+Route::get('cities', [CityController::class, 'index']);
 // Start::Category ===================================================== //
 
+// Start::City ===================================================== //
+Route::get('cities', [CityController::class, 'index']);
+// Start::City ===================================================== //

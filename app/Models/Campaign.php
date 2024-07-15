@@ -20,6 +20,25 @@ class Campaign extends Model
     protected $primaryKey = 'campaign_id';
 
     protected $fillable = [
+        'campaign_id',
+        'campaign_title',
+        'campaign_description',
+        'start_at',
+        'close_at',
+        'conditions',
+        'product_image',
+        'ugc_no',
+        'ugc_videos_no',
+        'video_seconds_min',
+        'video_seconds_max',
+        'video_price',
+        'total_price',
+        'is_usg_show',
+        'is_brand_show',
+        'is_tiktok',
+        'is_instagram',
+        'is_youtube',
+        'is_sent_to_content_creator',
 
         'deleted_at',
         'created_at',

@@ -33,7 +33,7 @@ class CatController extends BaseApiController
             }
 
             if ($request->cat_name) {
-                $items = $items->where('cat_name', $request->cat_name);
+                $items = $items->search('cat_name', $request->cat_name);
             }
 
             if ($request->dateFrom) {

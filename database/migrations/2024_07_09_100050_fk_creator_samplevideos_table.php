@@ -12,7 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('creator_samplevideos', function (Blueprint $table) {
-            $table->foreign('creator_id')->references('creator_id')->on('creators')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('creator_id', 'creator_id')->references('creator_id')->on('creators')->onDelete('cascade')->onUpdate('cascade');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('creator_samplevideos', function (Blueprint $table) {
+            $table->dropForeign(['creator_id']);
         });
     }
 };

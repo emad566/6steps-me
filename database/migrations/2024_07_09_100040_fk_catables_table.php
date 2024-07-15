@@ -12,8 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('catables', function (Blueprint $table) {
-
+            $table->foreign('cat_cat_id', 'cat_cat_id')->references('cat_id')->on('cats')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
+    public function down(): void
+    {
+        Schema::table('catables', function (Blueprint $table) {
+            $table->dropForeign(['cat_cat_id']);
+        });
+    }
 };

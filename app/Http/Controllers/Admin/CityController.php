@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\API\Brand;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\API\BaseApiController;
-use App\Http\Resources\CampaignResource;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CityResource;
 use App\Models\AppConstants;
-use App\Models\Campaign;
+use App\Models\City;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
-class CampaignController extends BaseApiController
+class CityController extends BaseApiController
 {
     /**
      * Display a listing of the resource.
@@ -19,19 +21,19 @@ class CampaignController extends BaseApiController
         try {
             $validator = Validator::make($request->all(), [
                 ...AppConstants::$listVaidations,
-                'sortColumn' => 'nullable|in:campaign_name,campaign_id'
+                'sortColumn' => 'nullable|in:city_name,city_id'
             ]);
 
             $check = $this->checkValidator($validator);
             if ($check) return $check;
 
-            $items = Campaign::withTrashed()->orderBy($request->sortColumn ?? 'campaign_id', $request->sortDirection ?? 'DESC');
+            $items = City::withTrashed()->orderBy($request->sortColumn ?? 'city_id', $request->sortDirection ?? 'DESC');
             if (!auth('admin')->check()) {
                 $items = $items->whereNull('deleted_at');
             }
 
-            if ($request->campaign_name) {
-                $items = $items->search('campaign_name', $request->campaign_name);
+            if ($request->city_name) {
+                $items = $items->search('city_name', $request->city_name);
             }
 
             if ($request->dateFrom) {
@@ -43,7 +45,7 @@ class CampaignController extends BaseApiController
             }
 
             $items = $items->paginate($request->paginationCounter ?? AppConstants::$PerPage);
-            return $this->sendResponse(true, data: ['items' => CampaignResource::collection($items)->response()->getData(true)], message: trans('Listed'));
+            return $this->sendResponse(true, data: ['items' => CityResource::collection($items)->response()->getData(true)], message: trans('Listed'));
         } catch (\Throwable $th) {
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
@@ -55,7 +57,6 @@ class CampaignController extends BaseApiController
     public function create()
     {
         try {
-            
 
             return $this->sendResponse(true, [], '', null);
         } catch (\Throwable $th) {
@@ -70,17 +71,20 @@ class CampaignController extends BaseApiController
     {
         try {
             $validator = Validator::make($request->all(), [
-                'campaign_name' => 'required|min:3|max:50|unique:campaigns,campaign_name'
+                'city_name' => 'required|min:3|max:50|unique:cities,city_name'
             ]);
 
             $check = $this->checkValidator($validator);
             if ($check) return $check;
 
-            $item = Campaign::create(['campaign_name' => $request->campaign_name]);
+            $item = City::create([
+                'city_name' => $request->city_name,
+                'country_name' => 'Saudi Arabia',
+            ]);
 
             return $this->sendResponse(true, [
-                'item' => new CampaignResource($item),
-            ], trans('CampaignegoryHasBeenCreated'));
+                'item' => new CityResource($item),
+            ], trans('CityegoryHasBeenCreated'));
         } catch (\Throwable $th) {
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
@@ -92,17 +96,17 @@ class CampaignController extends BaseApiController
     public function show($id)
     {
         try {
-            $validator = Validator::make(['campaign_id' => $id], [
-                'campaign_id' => 'required|exists:campaigns,campaign_id'
+            $validator = Validator::make(['city_id' => $id], [
+                'city_id' => 'required|exists:cities,city_id'
             ]);
 
             $check = $this->checkValidator($validator);
             if ($check) return $check;
-            $item = Campaign::withTrashed()->where('campaign_id', $id)->first();
+            $item = City::withTrashed()->where('city_id', $id)->first();
 
 
             return $this->sendResponse(true, [
-                'item' => new CampaignResource($item),
+                'item' => new CityResource($item),
             ], trans('show'));
         } catch (\Throwable $th) {
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
@@ -115,17 +119,17 @@ class CampaignController extends BaseApiController
     public function edit($id)
     {
         try {
-            $validator = Validator::make(['campaign_id' => $id], [
-                'campaign_id' => 'required|exists:campaigns,campaign_id'
+            $validator = Validator::make(['city_id' => $id], [
+                'city_id' => 'required|exists:cities,city_id'
             ]);
 
             $check = $this->checkValidator($validator);
             if ($check) return $check;
-            $item = Campaign::withTrashed()->where('campaign_id', $id)->first();
+            $item = City::withTrashed()->where('city_id', $id)->first();
 
 
             return $this->sendResponse(true, [
-                'item' => new CampaignResource($item),
+                'item' => new CityResource($item),
             ], trans('show'));
         } catch (\Throwable $th) {
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
@@ -138,20 +142,20 @@ class CampaignController extends BaseApiController
     public function update(Request $request, $id)
     {
         try {
-            $validator = Validator::make([...$request->all(), 'campaign_id' => $id], [
-                'campaign_id' => 'required|exists:campaigns,campaign_id',
-                'campaign_name' => 'required|unique:campaigns,campaign_name,' . $id . ',campaign_id',
+            $validator = Validator::make([...$request->all(), 'city_id' => $id], [
+                'city_id' => 'required|exists:cities,city_id',
+                'city_name' => 'required|unique:cities,city_name,' . $id . ',city_id',
             ]);
 
             $check = $this->checkValidator($validator);
             if ($check) return $check;
-            $item = Campaign::where('campaign_id', $id)->first();
+            $item = City::where('city_id', $id)->first();
 
 
-            $item->update(['campaign_name' => $request->campaign_name]);
+            $item->update(['city_name' => $request->city_name]);
 
             return $this->sendResponse(true, [
-                'item' => new CampaignResource($item),
+                'item' => new CityResource($item),
             ], trans('successfullUpdate'), null);
         } catch (\Throwable $th) {
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
@@ -164,19 +168,19 @@ class CampaignController extends BaseApiController
     public function destroy($id)
     {
         try {
-            $validator = Validator::make(['campaign_id' => $id], [
-                'campaign_id' => 'required|exists:campaigns,campaign_id'
+            $validator = Validator::make(['city_id' => $id], [
+                'city_id' => 'required|exists:cities,city_id'
             ]);
 
             $check = $this->checkValidator($validator);
             if ($check) return $check;
-            $item = Campaign::withTrashed()->where('campaign_id', $id)->first();
+            $item = City::withTrashed()->where('city_id', $id)->first();
 
             $oldItem = $item;
             $item->forceDelete();
 
             return $this->sendResponse(true, [
-                'item' => new CampaignResource($oldItem),
+                'item' => new CityResource($oldItem),
             ], trans('successfullDelete'), null);
         } catch (\Throwable $th) {
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
@@ -188,22 +192,22 @@ class CampaignController extends BaseApiController
      */
     public function toggleActive($id)
     {
-        try {
-            $validator = Validator::make(['campaign_id' => $id], [
-                'campaign_id' => 'required|exists:campaigns,campaign_id'
-            ]);
+        // try {
+        $validator = Validator::make(['city_id' => $id], [
+            'city_id' => 'required|exists:cities,city_id'
+        ]);
 
-            $check = $this->checkValidator($validator);
-            if ($check) return $check;
+        $check = $this->checkValidator($validator);
+        if ($check) return $check;
 
-            $item = Campaign::withTrashed()->where('campaign_id', $id)->first();
-            $item->update(['deleted_at' => $item->deleted_at ? null : Carbon::now()]);
+        $item = City::withTrashed()->where('city_id', $id)->first();
+        $item->update(['deleted_at' => $item->deleted_at ? null : Carbon::now()]);
 
-            return $this->sendResponse(true, [
-                'item' => new CampaignResource($item),
-            ], trans('successfullUpdate'), null);
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
+        return $this->sendResponse(true, [
+            'item' => new CityResource($item),
+        ], trans('successfullUpdate'), null);
+        // } catch (\Throwable $th) {
+        //     return $this->sendResponse(false, null, trans('technicalError'), null, 500);
+        // }
     }
 }

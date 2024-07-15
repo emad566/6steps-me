@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminAuthController  extends BaseApiController
 {
-    public function login(Request $request) {
-        try{
+    public function login(Request $request)
+    {
+        try {
             $validator = Validator::make($request->all(), [
                 'email' => 'required|exists:admins,email',
                 'password' => 'required',
@@ -24,8 +25,8 @@ class AdminAuthController  extends BaseApiController
             if ($check) return $check;
 
             $item = Admin::where('email', $request->email)->first();
-            if(!$item){
-                return $this->sendResponse(false, null, trans('inActiveAccount'), ['email'=>[trans('inActiveAccount')]]);
+            if (!$item) {
+                return $this->sendResponse(false, null, trans('inActiveAccount'), ['email' => [trans('inActiveAccount')]], 400);
             }
 
             $item->tokens()->delete();
@@ -36,7 +37,7 @@ class AdminAuthController  extends BaseApiController
                 'item' => new  AdminResource($item),
             ], 'Successfull login', null);
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 }

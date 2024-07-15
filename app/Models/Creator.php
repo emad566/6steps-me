@@ -73,6 +73,11 @@ class Creator extends Authenticatable
         $this->attributes['email'] = strtolower($value);
     }
 
+    public function getLogoAttribute($value)
+    {
+        return  asset('storage/' . $value);
+    }
+
     public function sampleVideos(): HasMany
     {
         return $this->hasMany(CreatorSamplevideo::class, 'creator_id', 'creator_id');

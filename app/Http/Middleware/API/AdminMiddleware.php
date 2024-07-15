@@ -19,7 +19,7 @@ class AdminMiddleware extends BaseApiController
         if (auth('admin')->check()) {
             return $next($request);
         } else {
-            return $this->sendResponse(false, [], "You are not admin user");
+            return $this->sendResponse(false, [], "You are not admin user", null, 400);
         }
     }
 }

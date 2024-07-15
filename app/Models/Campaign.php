@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use App\Http\Traits\CreatedUpdatedFormat;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Cat extends Model
+class Campaign extends Model
 {
     use SoftDeletes, CreatedUpdatedFormat;
 
@@ -18,19 +16,13 @@ class Cat extends Model
      *
      * @var array<int, string>
      */
-    protected $table = 'cats';
-    protected $primaryKey = 'cat_id';
+    protected $table = 'campaigns';
+    protected $primaryKey = 'campaign_id';
 
     protected $fillable = [
-        'cat_name',
 
         'deleted_at',
         'created_at',
         'updated_at',
     ];
-
-    public function creatrs(): MorphToMany
-    {
-        return $this->morphedByMany(Creator::class, 'catables');
-    }
 }

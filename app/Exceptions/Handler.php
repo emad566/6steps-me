@@ -36,7 +36,7 @@ class Handler extends ExceptionHandler
     {
         if ($request->expectsJson()) {
             $baseApiController = new BaseApiController();
-            return $baseApiController->sendResponse(false, [], "Unauthenticated", [], 401);
+            return $baseApiController->sendResponse(false, [], "Unauthorized", [], 401);
         }
 
         // Customize the redirect route here

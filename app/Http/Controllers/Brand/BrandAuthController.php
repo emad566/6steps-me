@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Brand;
 
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\BrandResource;
+use App\Models\AppConstants;
 use App\Models\Brand;
-use App\Models\Cat; 
+use App\Models\Cat;
 use App\Services\SendEmailOTPSerivce;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -36,24 +37,26 @@ class BrandAuthController extends BaseApiController
 
                 $diff_otp_time = Carbon::now()->diffInSeconds(Carbon::parse($item->otp_created_at));
 
-                if ($diff_otp_time < 60) {
-                    $errorMsg = trans('tryAgainAfter', ['seconds' => (60 - $diff_otp_time)]);
-                    return $this->sendResponse(false, ['delay_seconds' => (60 - $diff_otp_time)], $errorMsg, [['email' => $errorMsg]]);
+                $otpDelay = AppConstants::$otpDelay;
+
+                if ($diff_otp_time < $otpDelay) {
+                    $errorMsg = trans('tryAgainAfter', ['seconds' => ($otpDelay - $diff_otp_time)]);
+                    return $this->sendResponse(false, ['delay_seconds' => ($otpDelay - $diff_otp_time)], $errorMsg, [['email' => $errorMsg]], 400);
                 }
             }
 
-            try{
+            try {
 
                 $sendBrandOTPSerivce = new SendEmailOTPSerivce($item);
             } catch (\Throwable $th) {
-                return $this->sendResponse(false, [], trans('NotValidEmail'), ['email'=>[trans('NotValidEmail')]]);
+                return $this->sendResponse(false, [], trans('NotValidEmail'), ['email' => [trans('NotValidEmail')]], 400);
             }
 
             return $this->sendResponse(true, [
                 'otp' => $sendBrandOTPSerivce->otp,
             ], trans('otpHasBeenSentToYourEmail'), null);
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
@@ -74,13 +77,13 @@ class BrandAuthController extends BaseApiController
 
             if (!$item) {
                 $errorMsg = trans('invalidOtp');
-                return $this->sendResponse(false, null, $errorMsg, [['otp' => $errorMsg]]);
+                return $this->sendResponse(false, null, $errorMsg, [['otp' => $errorMsg]], 400);
             }
 
             $diff_otp_time = Carbon::now()->diffInSeconds(Carbon::parse($item->otp_created_at));
             if ($diff_otp_time > 600) {
                 $errorMsg = trans('otpHasBeenExpired!');
-                return $this->sendResponse(false, null, $errorMsg, [['email' => $errorMsg]]);
+                return $this->sendResponse(false, null, $errorMsg, [['email' => $errorMsg]], 400);
             }
 
             $item->update(['otp' => '', 'email_verified_at' => Carbon::now()]);
@@ -92,13 +95,17 @@ class BrandAuthController extends BaseApiController
                 'item' => new  BrandResource($item),
             ], 'Successfull login', null);
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
     function updateProfile(Request $request, $id)
     {
         try {
+            if (auth()->user()->brand_id != $id && !auth('admin')->check()) {
+                return $this->sendResponse(false, [], "You are not admin user", null, 400);
+            }
+
             $validator = Validator::make([...$request->all(), 'id' => $id], [
                 'id' => 'required|exists:brands,brand_id',
                 'brand_name' => 'required|min:3|max:60|unique:brands,brand_name,' . $id . ',brand_id',
@@ -114,12 +121,12 @@ class BrandAuthController extends BaseApiController
             ]);
 
             $check = $this->checkValidator($validator);
-            if ($check) return $check;  
+            if ($check) return $check;
 
             $item = Brand::findOrFail($id);
 
-            DB::beginTransaction();  
-            $item->update([  
+            DB::beginTransaction();
+            $item->update([
                 'brand_name' => $request->brand_name,
                 'logo' => $request->logo,
                 'website_url' => $request->website_url,
@@ -138,7 +145,7 @@ class BrandAuthController extends BaseApiController
                 'item' => new  BrandResource($item),
             ], trans('successfullLogin'), null);
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 }

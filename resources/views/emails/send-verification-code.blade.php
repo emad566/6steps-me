@@ -10,21 +10,23 @@
 
 </head>
 <body>
-# Your OTP for Verification
+<div style="padding-left: 50px;">
 <br>
 Hello,
 <br>
 Your one-time password (OTP) for verification is: 
 <br>
-<div><strong>{{ $code }}</strong></div>
+<br>
+<div style="text-align:center; font-size:26px;"><strong>{{ $code }}</strong></div>
 <br>
 It will expire after 6 minutes
 <br>
 If you did not request this OTP, please ignore this email.
 <br>
-Thanks,<br>
 <br>
-6stepsa
+Thanks,<br>
+6stepsa.com
+</div>
 
 </body>
 </html>

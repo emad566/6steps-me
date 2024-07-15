@@ -34,7 +34,7 @@ class BaseApiController extends Controller
     public function sendServerError($msg = '', $data = null, $th = false)
     {
         $thStr = $th ? $th->getMessage() : '';
-        return $this->sendResponse(false, $data, 'Server Technical Error: ' . $msg . " $thStr");
+        return $this->sendResponse(false, $data, 'Server Technical Error: ' . $msg . " $thStr", null, 500);
     }
 
     public function checkValidator($validator, $data = null)
@@ -61,14 +61,14 @@ class BaseApiController extends Controller
                 // 'response_code' => 200,
             ];
 
-            return response()->json($response, 200);
+            return response()->json($response, 400);
         } else return false;
     }
 
     public function permission_logout()
     {
         try {
-            return $this->sendResponse(false, ['unAuth' => 1], "Unauthenticated.", []);
+            return $this->sendResponse(false, ['unAuth' => 1], "Unauthenticated.", [], 401);
         } catch (\Throwable $th) {
         }
     }

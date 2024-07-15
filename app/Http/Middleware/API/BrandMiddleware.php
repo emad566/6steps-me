@@ -19,7 +19,7 @@ class BrandMiddleware extends BaseApiController
         if (auth('brand')->check()) {
             return $next($request);
         } else {
-            return $this->sendResponse(false, [], "You are not brand user");
+            return $this->sendResponse(false, [], "You are not brand user", null, 400);
         }
     }
 }

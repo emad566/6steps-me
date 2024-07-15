@@ -4,7 +4,9 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\CatController;
 use App\Http\Controllers\API\FileController;
 use App\Http\Controllers\Brand\BrandAuthController;
+use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Creator\CreatorAuthController;
+use App\Http\Controllers\Creator\CreatorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +26,14 @@ use Illuminate\Support\Facades\Route;
 Route::post('uploadFile', [FileController::class, 'uploadFile']);
 Route::Delete('deleteFile', [FileController::class, 'deleteFile']);
 // Start::Files ===================================================== //
+
+// Start::Brand ===================================================== //
+Route::get('brands/{id}', [BrandController::class, 'show']);
+// Start::Brand ===================================================== //
+
+// Start::Creator ===================================================== //
+Route::get('creators/{id}', [CreatorController::class, 'show']);
+// Start::Creator ===================================================== //
 
 // Start::Category ===================================================== //
 Route::get('cats', [CatController::class, 'index']);

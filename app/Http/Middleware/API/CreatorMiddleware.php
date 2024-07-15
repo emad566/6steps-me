@@ -19,7 +19,7 @@ class CreatorMiddleware extends BaseApiController
         if (auth('creator')->check()) {
             return $next($request);
         } else {
-            return $this->sendResponse(false, [], "You are not creator user");
+            return $this->sendResponse(false, [], "You are not creator user", null, 400);
         }
     }
 }

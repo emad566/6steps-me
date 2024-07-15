@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Creator;
 
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\CreatorResource;
+use App\Models\AppConstants;
 use App\Models\Cat;
 use App\Models\Creator;
 use App\Services\SendCreatorOTPSerivce;
@@ -30,14 +31,16 @@ class CreatorAuthController extends BaseApiController
             } else {
                 if ($creator->deleted_at) {
                     $errorMsg = trans('disabledAccount');
-                    return $this->sendResponse(false, null, $errorMsg, [['mobile' => $errorMsg]]);
+                    return $this->sendResponse(false, null, $errorMsg, [['mobile' => $errorMsg]], 400);
                 }
 
                 $diff_otp_time = Carbon::now()->diffInSeconds(Carbon::parse($creator->otp_created_at));
 
-                if ($diff_otp_time < 60) {
-                    $errorMsg = trans('tryAgainAfter', ['seconds' => (60 - $diff_otp_time)]);
-                    return $this->sendResponse(false, ['delay_seconds' => (60 - $diff_otp_time)], $errorMsg, [['mobile' => $errorMsg]]);
+                $otpDelay = AppConstants::$otpDelay;
+
+                if ($diff_otp_time < $otpDelay) {
+                    $errorMsg = trans('tryAgainAfter', ['seconds' => ($otpDelay - $diff_otp_time)]);
+                    return $this->sendResponse(false, ['delay_seconds' => ($otpDelay - $diff_otp_time)], $errorMsg, [['mobile' => $errorMsg]], 400);
                 }
             }
 
@@ -46,7 +49,7 @@ class CreatorAuthController extends BaseApiController
                 'otp' => $sendCreatorOTPSerivce->otp,
             ], trans('otpHasBeenSentToYourMobile'), null);
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
@@ -67,13 +70,13 @@ class CreatorAuthController extends BaseApiController
 
             if (!$creator) {
                 $errorMsg = trans('invalidOtp');
-                return $this->sendResponse(false, null, $errorMsg, [['otp' => $errorMsg]]);
+                return $this->sendResponse(false, null, $errorMsg, [['otp' => $errorMsg]], 400);
             }
 
             $diff_otp_time = Carbon::now()->diffInSeconds(Carbon::parse($creator->otp_created_at));
             if ($diff_otp_time > 600) {
                 $errorMsg = trans('otpHasBeenExpired!');
-                return $this->sendResponse(false, null, $errorMsg, [['mobile' => $errorMsg]]);
+                return $this->sendResponse(false, null, $errorMsg, [['mobile' => $errorMsg]], 400);
             }
 
             $creator->update(['otp' => '']);
@@ -85,13 +88,17 @@ class CreatorAuthController extends BaseApiController
                 'item' => new  CreatorResource($creator),
             ], 'Successfull login', null);
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
     function updateProfile(Request $request, $id)
     {
-        try {
+        try { 
+            if (auth()->user()->creator_id != $id && !auth('admin')->check()) {
+                return $this->sendResponse(false, [], "You are not admin user", null, 400);
+            }
+
             $validator = Validator::make([...$request->all(), 'id' => $id], [
                 'id' => 'required|exists:creators,creator_id',
                 'creator_name' => 'required|min:3|max:60|unique:creators,creator_name,' . $id . ',creator_id',
@@ -113,7 +120,7 @@ class CreatorAuthController extends BaseApiController
             $check = $this->checkValidator($validator);
             if ($check) return $check;
 
-            $creator = Creator::findOrFail($id);
+
 
             DB::beginTransaction();
             $creator->update([
@@ -142,7 +149,7 @@ class CreatorAuthController extends BaseApiController
                 'item' => new  CreatorResource($creator),
             ], trans('successfullLogin'), null);
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 }

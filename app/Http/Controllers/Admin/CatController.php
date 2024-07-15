@@ -32,7 +32,7 @@ class CatController extends BaseApiController
                 $items = $items->whereNull('deleted_at');
             }
 
-            if($request->cat_name) {
+            if ($request->cat_name) {
                 $items = $items->where('cat_name', $request->cat_name);
             }
 
@@ -47,7 +47,7 @@ class CatController extends BaseApiController
             $items = $items->paginate($request->paginationCounter ?? AppConstants::$PerPage);
             return $this->sendResponse(true, data: ['items' => CatResource::collection($items)->response()->getData(true)], message: trans('Listed'));
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
@@ -59,11 +59,9 @@ class CatController extends BaseApiController
         try {
 
 
-            return $this->sendResponse(true, [
-
-            ], '', null);
+            return $this->sendResponse(true, [], '', null);
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
@@ -86,7 +84,7 @@ class CatController extends BaseApiController
                 'item' => new CatResource($item),
             ], trans('CategoryHasBeenCreated'));
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
@@ -109,7 +107,7 @@ class CatController extends BaseApiController
                 'item' => new CatResource($item),
             ], trans('show'));
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
@@ -132,7 +130,7 @@ class CatController extends BaseApiController
                 'item' => new CatResource($item),
             ], trans('show'));
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
@@ -158,7 +156,7 @@ class CatController extends BaseApiController
                 'item' => new CatResource($item),
             ], trans('successfullUpdate'), null);
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
@@ -183,7 +181,7 @@ class CatController extends BaseApiController
                 'item' => new CatResource($oldItem),
             ], trans('successfullDelete'), null);
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
@@ -201,14 +199,13 @@ class CatController extends BaseApiController
             if ($check) return $check;
 
             $item = Cat::withTrashed()->where('cat_id', $id)->first();
-            $item->update(['deleted_at' => $item->deleted_at? null : Carbon::now()]);
+            $item->update(['deleted_at' => $item->deleted_at ? null : Carbon::now()]);
 
             return $this->sendResponse(true, [
                 'item' => new CatResource($item),
             ], trans('successfullUpdate'), null);
-
         } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'));
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 }

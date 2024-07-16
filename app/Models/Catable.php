@@ -5,7 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphToMany; 
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Catable extends Model
 {
@@ -34,5 +34,10 @@ class Catable extends Model
     public function brands(): MorphToMany
     {
         return $this->morphedByMany(Brand::class, 'catable');
+    }
+
+    public function campaigns(): MorphToMany
+    {
+        return $this->morphedByMany(Campaign::class, 'catable');
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Cat;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,37 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
+
+        $cats = [
+            [
+                "cat_name" => "Music",
+            ],
+            [
+                "cat_name" => "Restorante",
+            ],
+            [
+                "cat_name" => "Player",
+            ],
+            [
+                "cat_name" => "Store",
+            ],
+            [
+                "cat_name" => "Famouse",
+            ],
+            [
+                "cat_name" => "Cat1",
+            ],
+            [
+                "cat_name" => "Cat2",
+            ],
+            [
+                "cat_name" => "Cat3",
+            ]
+        ];
+
+        foreach ($cats as $cat) {
+            Cat::create($cat);
+        }
     }
 
     /**

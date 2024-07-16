@@ -1,7 +1,8 @@
 <?php
+
 namespace App\Services;
 
-use App\Mail\SendCodeMail; 
+use App\Mail\SendCodeMail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
@@ -15,11 +16,13 @@ class SendEmailOTPSerivce
         $item->update(['otp' => rand(1000, 9999), 'otp_created_at' => Carbon::now()]);
         $this->otp = $item->otp;
 
-        $this->send();
+        if (env('APP_ENV') != 'local') {
+            $this->send();
+        }
     }
 
-    protected function send() {
+    protected function send()
+    {
         Mail::send(new SendCodeMail($this->item->email, $this->otp));
     }
 }
-

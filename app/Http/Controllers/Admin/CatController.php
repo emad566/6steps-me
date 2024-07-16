@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\API\BaseApiController;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\CatResource;
-use App\Models\AppConstants;
+use App\Http\Traits\ControllerTrait;
 use App\Models\Cat;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class CatController extends BaseApiController
@@ -16,40 +14,23 @@ class CatController extends BaseApiController
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        try {
-            $validator = Validator::make($request->all(), [
-                ...AppConstants::$listVaidations,
-                'sortColumn' => 'nullable|in:cat_name,cat_id'
-            ]);
+    use ControllerTrait;
 
-            $check = $this->checkValidator($validator);
-            if ($check) return $check;
+    protected $table = 'cats';
+    protected $model = Cat::class;
+    protected $resource = CatResource::class;
 
-            $items = Cat::withTrashed()->orderBy($request->sortColumn ?? 'cat_id', $request->sortDirection ?? 'DESC');
-            if (!auth('admin')->check()) {
-                $items = $items->whereNull('deleted_at');
-            }
+    protected $columns = [
+        'cat_id',
+        'cat_name',
 
-            if ($request->cat_name) {
-                $items = $items->search('cat_name', $request->cat_name);
-            }
+        'deleted_at',
+        'created_at',
+        'updated_at',
+    ];
 
-            if ($request->dateFrom) {
-                $items =  $items->where('created_at', '>=', Carbon::parse($request->dateFrom));
-            }
 
-            if ($request->dateTo) {
-                $items =  $items->where('created_at', '<=', Carbon::parse($request->dateTo));
-            }
 
-            $items = $items->paginate($request->paginationCounter ?? AppConstants::$PerPage);
-            return $this->sendResponse(true, data: ['items' => CatResource::collection($items)->response()->getData(true)], message: trans('Listed'));
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -88,28 +69,6 @@ class CatController extends BaseApiController
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        try {
-            $validator = Validator::make(['cat_id' => $id], [
-                'cat_id' => 'required|exists:cats,cat_id'
-            ]);
-
-            $check = $this->checkValidator($validator);
-            if ($check) return $check;
-            $item = Cat::withTrashed()->where('cat_id', $id)->first();
-
-
-            return $this->sendResponse(true, [
-                'item' => new CatResource($item),
-            ], trans('show'));
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -151,55 +110,6 @@ class CatController extends BaseApiController
 
 
             $item->update(['cat_name' => $request->cat_name]);
-
-            return $this->sendResponse(true, [
-                'item' => new CatResource($item),
-            ], trans('successfullUpdate'), null);
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        try {
-            $validator = Validator::make(['cat_id' => $id], [
-                'cat_id' => 'required|exists:cats,cat_id'
-            ]);
-
-            $check = $this->checkValidator($validator);
-            if ($check) return $check;
-            $item = Cat::withTrashed()->where('cat_id', $id)->first();
-
-            $oldItem = $item;
-            $item->forceDelete();
-
-            return $this->sendResponse(true, [
-                'item' => new CatResource($oldItem),
-            ], trans('successfullDelete'), null);
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
-    }
-
-    /**
-     * toggle active.
-     */
-    public function toggleActive($id)
-    {
-        try {
-            $validator = Validator::make(['cat_id' => $id], [
-                'cat_id' => 'required|exists:cats,cat_id'
-            ]);
-
-            $check = $this->checkValidator($validator);
-            if ($check) return $check;
-
-            $item = Cat::withTrashed()->where('cat_id', $id)->first();
-            $item->update(['deleted_at' => $item->deleted_at ? null : Carbon::now()]);
 
             return $this->sendResponse(true, [
                 'item' => new CatResource($item),

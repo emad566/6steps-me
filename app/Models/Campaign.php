@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Http\Traits\CreatedUpdatedFormat;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Campaign extends Model
 {
@@ -44,4 +44,19 @@ class Campaign extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function getProductImageAttribute($value)
+    {
+        return  asset('storage/' . $value);
+    }
+
+    public function cats(): MorphToMany
+    {
+        return $this->morphToMany(Cat::class, 'catable');
+    }
+
+    public function cities(): MorphToMany
+    {
+        return $this->morphToMany(City::class, 'cityable');
+    }
 }

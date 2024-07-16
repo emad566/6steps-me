@@ -5,10 +5,11 @@ namespace App\Http\Controllers\API;
 
 use App\Exports\CollectionExport;
 use App\Http\Controllers\Controller;
+use App\Models\AppConstants;
 use App\Models\Downloads;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 
 
 class BaseApiController extends Controller
@@ -18,6 +19,7 @@ class BaseApiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+ 
 
     public function sendResponse($status = true, $data = null, $message = '', $errors = null, $code = 200)
     {

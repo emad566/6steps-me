@@ -28,4 +28,14 @@ class City extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function creatrs(): MorphToMany
+    {
+        return $this->morphedByMany(Creator::class, 'cityable');
+    }
+
+    public function campaigns(): MorphToMany
+    {
+        return $this->morphedByMany(Campaign::class, 'cityable');
+    }
 }

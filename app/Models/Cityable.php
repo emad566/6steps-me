@@ -28,11 +28,16 @@ class Cityable extends Model
 
     public function creators(): MorphToMany
     {
-        return $this->morphedByMany(Creator::class, 'catable');
+        return $this->morphedByMany(Creator::class, 'cityable');
     }
 
     public function brands(): MorphToMany
     {
-        return $this->morphedByMany(Brand::class, 'catable');
+        return $this->morphedByMany(Brand::class, 'cityable');
+    }
+
+    public function campaigns(): MorphToMany
+    {
+        return $this->morphedByMany(Campaign::class, 'cityable');
     }
 }

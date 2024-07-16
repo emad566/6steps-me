@@ -34,6 +34,8 @@ class CampaignResource extends JsonResource
             'is_instagram' => $this->is_instagram,
             'is_youtube' => $this->is_youtube,
             'is_sent_to_content_creator' => $this->is_sent_to_content_creator,
+            'city_names' => $this->cities()->pluck('city_name')->toArray(),
+            'cat_names' => $this->cats()->pluck('cat_name')->toArray(),
 
             'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,

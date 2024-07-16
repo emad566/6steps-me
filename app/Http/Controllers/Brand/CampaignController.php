@@ -1,136 +1,138 @@
 <?php
 
-namespace App\Http\Controllers\API\Brand;
+namespace App\Http\Controllers\Brand;
 
 use App\Http\Controllers\API\BaseApiController;
+use App\Http\Traits\ControllerTrait;
 use App\Http\Resources\CampaignResource;
-use App\Models\AppConstants;
 use App\Models\Campaign;
+use App\Models\Cat;
+use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class CampaignController extends BaseApiController
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
-    {
-        try {
-            $validator = Validator::make($request->all(), [
-                ...AppConstants::$listVaidations,
-                'sortColumn' => 'nullable|in:campaign_name,campaign_id'
-            ]);
+    use ControllerTrait;
 
-            $check = $this->checkValidator($validator);
-            if ($check) return $check;
+    protected $table = 'campaigns';
+    protected $model = Campaign::class;
+    protected $resource = CampaignResource::class;
 
-            $items = Campaign::withTrashed()->orderBy($request->sortColumn ?? 'campaign_id', $request->sortDirection ?? 'DESC');
-            if (!auth('admin')->check()) {
-                $items = $items->whereNull('deleted_at');
-            }
+    protected $columns = [
+        'campaign_id',
+        'campaign_title',
+        'campaign_description',
+        'start_at',
+        'close_at',
+        'conditions',
+        'product_image',
+        'ugc_no',
+        'ugc_videos_no',
+        'video_seconds_min',
+        'video_seconds_max',
+        'video_price',
+        'total_price',
+        'is_usg_show',
+        'is_brand_show',
+        'is_tiktok',
+        'is_instagram',
+        'is_youtube',
+        'is_sent_to_content_creator',
 
-            if ($request->campaign_name) {
-                $items = $items->search('campaign_name', $request->campaign_name);
-            }
+        'deleted_at',
+        'created_at',
+        'updated_at',
+    ];
 
-            if ($request->dateFrom) {
-                $items =  $items->where('created_at', '>=', Carbon::parse($request->dateFrom));
-            }
 
-            if ($request->dateTo) {
-                $items =  $items->where('created_at', '<=', Carbon::parse($request->dateTo));
-            }
-
-            $items = $items->paginate($request->paginationCounter ?? AppConstants::$PerPage);
-            return $this->sendResponse(true, data: ['items' => CampaignResource::collection($items)->response()->getData(true)], message: trans('Listed'));
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         try {
-            
-
-            return $this->sendResponse(true, [], '', null);
+            $city_names = City::orderBy('city_name', 'ASC')->pluck('city_name')->toArray();
+            $cat_names = Cat::orderBy('cat_name', 'ASC')->pluck('cat_name')->toArray();
+            return $this->sendResponse(true, [
+                'city_names' => $city_names,
+                'cat_names' => $cat_names,
+            ], '', null);
         } catch (\Throwable $th) {
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
-                'campaign_name' => 'required|min:3|max:50|unique:campaigns,campaign_name'
+                'campaign_title' => 'required|min:10|max:190|unique:campaigns,campaign_title',
+                'campaign_description' => 'required|min:20|max:200',
+                'start_at' => 'required|date|date_format:Y-m-d H:i:s',
+                'close_at' => 'required|date|date_format:Y-m-d H:i:s',
+                'conditions' => 'required|min:20|max:200',
+                'product_image' => 'required|min:10|max:190',
+                'ugc_no' => 'required|numeric|min:1|max:100',
+                'ugc_videos_no' => 'required|numeric|min:1|max:1000',
+                'video_seconds_min' => 'required|numeric|min:1|max:10800',
+                'video_seconds_max' => 'required|numeric|min:1|max:10800',
+                'video_price' => 'required|min:1|max:10000',
+                'is_usg_show' => 'required|in:0,1',
+                'is_brand_show' => 'required|in:0,1',
+                'is_tiktok' => 'required|in:0,1',
+                'is_instagram' => 'required|in:0,1',
+                'is_youtube' => 'required|in:0,1',
+                'is_sent_to_content_creator' => 'required|in:0,1',
+                'cat_names' => 'required|array',
+                'cat_names.*' => 'required|exists:cats,cat_name',
+                'city_names' => 'required|array',
+                'city_names.*' => 'required|exists:cities,city_name',
+
             ]);
 
             $check = $this->checkValidator($validator);
             if ($check) return $check;
 
-            $item = Campaign::create(['campaign_name' => $request->campaign_name]);
+            DB::beginTransaction();
+            $item = Campaign::create([
+                'campaign_title' => $request->campaign_title,
+                'campaign_description' => $request->campaign_description,
+                'start_at' => $request->start_at,
+                'close_at' => $request->close_at,
+                'conditions' => $request->conditions,
+                'product_image' => $request->product_image,
+                'ugc_no' => $request->ugc_no,
+                'ugc_videos_no' => $request->ugc_videos_no,
+                'video_seconds_min' => $request->video_seconds_min,
+                'video_seconds_max' => $request->video_seconds_max,
+                'video_price' => $request->video_price,
+                'is_usg_show' => $request->is_usg_show,
+                'is_brand_show' => $request->is_brand_show,
+                'is_tiktok' => $request->is_tiktok,
+                'is_instagram' => $request->is_instagram,
+                'is_youtube' => $request->is_youtube,
+                'is_sent_to_content_creator' => $request->is_sent_to_content_creator,
+                'cat_names' => 'required|array',
+                'cat_names.*' => 'required|exists:cats,cat_name',
+                'city_names' => 'required|array',
+                'city_names.*' => 'required|exists:cities,city_name',
+            ]);
+
+            $cat_ids = Cat::withTrashed()->whereIn('cat_name', $request->cat_names)->pluck('cat_id')->toArray();
+            $item->cats()->sync($cat_ids);
+
+            $city_ids = City::withTrashed()->whereIn('city_name', $request->city_names)->pluck('city_id')->toArray();
+            $item->cities()->sync($city_ids);
+            DB::commit();
 
             return $this->sendResponse(true, [
                 'item' => new CampaignResource($item),
             ], trans('CampaignegoryHasBeenCreated'));
         } catch (\Throwable $th) {
+            DB::rollBack();
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        try {
-            $validator = Validator::make(['campaign_id' => $id], [
-                'campaign_id' => 'required|exists:campaigns,campaign_id'
-            ]);
-
-            $check = $this->checkValidator($validator);
-            if ($check) return $check;
-            $item = Campaign::withTrashed()->where('campaign_id', $id)->first();
-
-
-            return $this->sendResponse(true, [
-                'item' => new CampaignResource($item),
-            ], trans('show'));
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        try {
-            $validator = Validator::make(['campaign_id' => $id], [
-                'campaign_id' => 'required|exists:campaigns,campaign_id'
-            ]);
-
-            $check = $this->checkValidator($validator);
-            if ($check) return $check;
-            $item = Campaign::withTrashed()->where('campaign_id', $id)->first();
-
-
-            return $this->sendResponse(true, [
-                'item' => new CampaignResource($item),
-            ], trans('show'));
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
-    }
 
     /**
      * Update the specified resource in storage.
@@ -140,69 +142,67 @@ class CampaignController extends BaseApiController
         try {
             $validator = Validator::make([...$request->all(), 'campaign_id' => $id], [
                 'campaign_id' => 'required|exists:campaigns,campaign_id',
-                'campaign_name' => 'required|unique:campaigns,campaign_name,' . $id . ',campaign_id',
-            ]);
-
-            $check = $this->checkValidator($validator);
-            if ($check) return $check;
-            $item = Campaign::where('campaign_id', $id)->first();
-
-
-            $item->update(['campaign_name' => $request->campaign_name]);
-
-            return $this->sendResponse(true, [
-                'item' => new CampaignResource($item),
-            ], trans('successfullUpdate'), null);
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        try {
-            $validator = Validator::make(['campaign_id' => $id], [
-                'campaign_id' => 'required|exists:campaigns,campaign_id'
+                'campaign_title' => 'required|min:10|max:190|unique:campaigns,campaign_title,' . $id . ',campaign_id',
+                'campaign_description' => 'required|min:20|max:200',
+                'start_at' => 'required|date|date_format:Y-m-d H:i:s',
+                'close_at' => 'required|date|date_format:Y-m-d H:i:s',
+                'conditions' => 'required|min:20|max:200',
+                'product_image' => 'required|min:10|max:190',
+                'ugc_no' => 'required|numeric|min:1|max:100',
+                'ugc_videos_no' => 'required|numeric|min:1|max:1000',
+                'video_seconds_min' => 'required|numeric|min:1|max:10800',
+                'video_seconds_max' => 'required|numeric|min:1|max:10800',
+                'video_price' => 'required|min:1|max:10000',
+                'is_usg_show' => 'required|in:0,1',
+                'is_brand_show' => 'required|in:0,1',
+                'is_tiktok' => 'required|in:0,1',
+                'is_instagram' => 'required|in:0,1',
+                'is_youtube' => 'required|in:0,1',
+                'is_sent_to_content_creator' => 'required|in:0,1',
+                'cat_names' => 'required|array',
+                'cat_names.*' => 'required|exists:cats,cat_name',
+                'city_names' => 'required|array',
+                'city_names.*' => 'required|exists:cities,city_name',
             ]);
 
             $check = $this->checkValidator($validator);
             if ($check) return $check;
             $item = Campaign::withTrashed()->where('campaign_id', $id)->first();
 
-            $oldItem = $item;
-            $item->forceDelete();
-
-            return $this->sendResponse(true, [
-                'item' => new CampaignResource($oldItem),
-            ], trans('successfullDelete'), null);
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
-    }
-
-    /**
-     * toggle active.
-     */
-    public function toggleActive($id)
-    {
-        try {
-            $validator = Validator::make(['campaign_id' => $id], [
-                'campaign_id' => 'required|exists:campaigns,campaign_id'
+            DB::beginTransaction();
+            $item->update([
+                'campaign_title' => $request->campaign_title,
+                'campaign_description' => $request->campaign_description,
+                'start_at' => $request->start_at,
+                'close_at' => $request->close_at,
+                'conditions' => $request->conditions,
+                'product_image' => $request->product_image,
+                'ugc_no' => $request->ugc_no,
+                'ugc_videos_no' => $request->ugc_videos_no,
+                'video_seconds_min' => $request->video_seconds_min,
+                'video_seconds_max' => $request->video_seconds_max,
+                'video_price' => $request->video_price,
+                'is_usg_show' => $request->is_usg_show,
+                'is_brand_show' => $request->is_brand_show,
+                'is_tiktok' => $request->is_tiktok,
+                'is_instagram' => $request->is_instagram,
+                'is_youtube' => $request->is_youtube,
+                'is_sent_to_content_creator' => $request->is_sent_to_content_creator,
             ]);
 
-            $check = $this->checkValidator($validator);
-            if ($check) return $check;
 
-            $item = Campaign::withTrashed()->where('campaign_id', $id)->first();
-            $item->update(['deleted_at' => $item->deleted_at ? null : Carbon::now()]);
+            $cat_ids = Cat::withTrashed()->whereIn('cat_name', $request->cat_names)->pluck('cat_id')->toArray();
+            $item->cats()->sync($cat_ids);
+
+            $city_ids = City::withTrashed()->whereIn('city_name', $request->city_names)->pluck('city_id')->toArray();
+            $item->cities()->sync($city_ids);
+            DB::commit();
 
             return $this->sendResponse(true, [
                 'item' => new CampaignResource($item),
             ], trans('successfullUpdate'), null);
         } catch (\Throwable $th) {
+            DB::rollBack();
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }

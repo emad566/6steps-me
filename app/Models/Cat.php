@@ -31,6 +31,11 @@ class Cat extends Model
 
     public function creatrs(): MorphToMany
     {
-        return $this->morphedByMany(Creator::class, 'catables');
+        return $this->morphedByMany(Creator::class, 'catable');
+    }
+
+    public function campaigns(): MorphToMany
+    {
+        return $this->morphedByMany(Campaign::class, 'catable');
     }
 }

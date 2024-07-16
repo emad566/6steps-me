@@ -46,7 +46,6 @@ class BrandAuthController extends BaseApiController
             }
 
             try {
-
                 $sendBrandOTPSerivce = new SendEmailOTPSerivce($item);
             } catch (\Throwable $th) {
                 return $this->sendResponse(false, [], trans('NotValidEmail'), ['email' => [trans('NotValidEmail')]], 400);

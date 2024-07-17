@@ -8,21 +8,24 @@ use Illuminate\Support\Facades\Storage;
 
 
 
-function generateRandomPassword($length = 8) {
+function generateRandomPassword($length = 8)
+{
     $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-=+;:,.?";
     $password = substr(str_shuffle($chars), 0, $length);
     return $password;
 }
 
-function executionTime($start_time, $end_time){
+function executionTime($start_time, $end_time)
+{
     $total_time = $end_time - $start_time;
     $minutes = floor($total_time / 60);
     $seconds = $total_time % 60;
     return sprintf("%02d:%02d", $minutes, $seconds);
 }
 
-function logToFile($fileName, $content) {
-    $filePath = storage_path('app/'.$fileName);
+function logToFile($fileName, $content)
+{
+    $filePath = storage_path('app/' . $fileName);
 
     // Ensure that the file exists
     if (!file_exists($filePath)) {
@@ -35,7 +38,8 @@ function logToFile($fileName, $content) {
 
 
 
-function generateRandomStringId($length = 8) {
+function generateRandomStringId($length = 8)
+{
     $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     $id = substr(str_shuffle($chars), 0, $length);
     return $id . '-' . substr(str_shuffle($chars), 0, $length) . '-' . substr(str_shuffle($chars), 0, $length) . '-' . substr(str_shuffle($chars), 0, $length);
@@ -43,11 +47,12 @@ function generateRandomStringId($length = 8) {
 
 
 
-function delete_img($img_path){
+function delete_img($img_path)
+{
     if (file_exists($img_path)) {
         $path_info = pathinfo($img_path);
         $mask = $path_info['dirname'] . '/' . $path_info['filename'] . '*.*';
-        array_map( "unlink", glob( $mask ) );
+        array_map("unlink", glob($mask));
     }
 }
 
@@ -56,9 +61,9 @@ function delete_img($img_path){
 function getSrc($edit, $name)
 {
     $img = $name;
-    $imgSrc= $name.'Src';
-    if($edit){
-        if(file_exists($edit->$imgSrc())){
+    $imgSrc = $name . 'Src';
+    if ($edit) {
+        if (file_exists($edit->$imgSrc())) {
             return asset($edit->$imgSrc());
         }
     }
@@ -66,9 +71,10 @@ function getSrc($edit, $name)
 }
 
 
-function get_remote_file_info($url) {
-    $localSrc = str_replace(url('/').'/', '', $url);
-    if(file_exists($localSrc)){
+function get_remote_file_info($url)
+{
+    $localSrc = str_replace(url('/') . '/', '', $url);
+    if (file_exists($localSrc)) {
         $imgsize = filesize($localSrc);
         return formatSizeUnits($imgsize);
     }
@@ -76,28 +82,17 @@ function get_remote_file_info($url) {
 
 function formatSizeUnits($bytes)
 {
-    if ($bytes >= 1073741824)
-    {
+    if ($bytes >= 1073741824) {
         $bytes = number_format($bytes / 1073741824, 2) . ' GB';
-    }
-    elseif ($bytes >= 1048576)
-    {
+    } elseif ($bytes >= 1048576) {
         $bytes = number_format($bytes / 1048576, 2) . ' MB';
-    }
-    elseif ($bytes >= 1024)
-    {
+    } elseif ($bytes >= 1024) {
         $bytes = number_format($bytes / 1024, 2) . ' KB';
-    }
-    elseif ($bytes > 1)
-    {
+    } elseif ($bytes > 1) {
         $bytes = $bytes . ' bytes';
-    }
-    elseif ($bytes == 1)
-    {
+    } elseif ($bytes == 1) {
         $bytes = $bytes . ' byte';
-    }
-    else
-    {
+    } else {
         $bytes = '0 bytes';
     }
 
@@ -120,7 +115,7 @@ function getAttr($obj, $child, $attr)
 
 function sendNotification($data, $user_ids)
 {
-    try{
+    try {
         $device_tokens = AccessToken::whereIn('tokenable_id', $user_ids)->where('tokenable_id', '<>', Auth::id())->groupby('device_token')->pluck('device_token')->toArray();
 
         Larafirebase::withTitle($data['title'])
@@ -133,9 +128,8 @@ function sendNotification($data, $user_ids)
             ->withAdditionalData($data)
             ->sendNotification($device_tokens);
 
-            return $device_tokens;
-
-    }catch(\Exception $e){
+        return $device_tokens;
+    } catch (\Exception $e) {
         report($e);
         return apiResponse(0, 'NO Notification Sent!!');
     }
@@ -321,4 +315,3 @@ if (!function_exists('getDistanceByLatLng')) {
         );
     }
 }
-

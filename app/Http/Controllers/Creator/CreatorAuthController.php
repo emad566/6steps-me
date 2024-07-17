@@ -94,7 +94,7 @@ class CreatorAuthController extends BaseApiController
 
     function updateProfile(Request $request, $id)
     {
-        try { 
+        // try {
             if (auth()->user()->creator_id != $id && !auth('admin')->check()) {
                 return $this->sendResponse(false, [], "You are not admin user", null, 400);
             }
@@ -119,7 +119,7 @@ class CreatorAuthController extends BaseApiController
 
             $check = $this->checkValidator($validator);
             if ($check) return $check;
-
+            $creator = Creator::withTrashed()->where('creator_id', $id)->first();
 
 
             DB::beginTransaction();
@@ -148,8 +148,8 @@ class CreatorAuthController extends BaseApiController
             return $this->sendResponse(true, [
                 'item' => new  CreatorResource($creator),
             ], trans('successfullLogin'), null);
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
+        // } catch (\Throwable $th) {
+        //     return $this->sendResponse(false, null, trans('technicalError'), null, 500);
+        // }
     }
 }

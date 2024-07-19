@@ -51,7 +51,7 @@ class Campaign extends Model
 
     public function getProductImageAttribute($value)
     {
-        return  asset('storage/' . $value);
+        return $value? asset('storage/' . $value) : '';
     }
 
     public function brand(): HasOne

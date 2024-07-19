@@ -1,13 +1,15 @@
 <?php
 
 use App\Http\Controllers\Brand\CampaignController;
-use App\Http\Controllers\Brand\BrandAuthController;
+use App\Http\Controllers\Brand\BrandController;
 use Illuminate\Support\Facades\Route;
 
+ 
+// Start::Brand ================================================================= //
+Route::put('updateProfile/{id}', [BrandController::class, 'update']);
+Route::resource('brands', BrandController::class)->except(['destroy', 'store', 'create']);
+// End::Brand ===================================================== //
 
-// Start:: Brand ================================================================= //
-Route::put('updateProfile/{id}', [BrandAuthController::class, 'updateProfile']);
-// End:: Brand ================================================================= //
 
 // Start::Campaign ================================================================= //
 Route::resource('campaigns', CampaignController::class)->except(['destroy']);

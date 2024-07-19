@@ -17,15 +17,19 @@ class AdminResource extends JsonResource
     {
         $human = new CreatedUpdatedHuman($this);
         return [
+            'admin_id' => $this->admin_id,
             'admin_name' => $this->admin_name,
-            'email_verified_at' => $this->email_verified_at, 
+            'email' => $this->email,
             'mobile' => $this->mobile,
+            'logo' => $this->logo, 
+            'address' => $this->address,
+            'websit_url' => $this->websit_url,
+            'email_verified_at' => $this->email_verified_at, 
 
             'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            ...$human->human
-
+            ...$human->human 
         ];  
     }
 }

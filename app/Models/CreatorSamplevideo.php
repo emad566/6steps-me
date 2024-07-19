@@ -36,6 +36,6 @@ class CreatorSamplevideo extends Model
 
     public function getVideoImagePathAttribute($value)
     {
-        return  asset('storage/' . $value);
+        return $value? asset('storage/' . $value) : '';
     }
 }

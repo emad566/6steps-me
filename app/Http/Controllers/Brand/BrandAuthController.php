@@ -96,55 +96,5 @@ class BrandAuthController extends BaseApiController
         } catch (\Throwable $th) {
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
-    }
-
-    function updateProfile(Request $request, $id)
-    {
-        try {
-            if (auth()->user()->brand_id != $id && !auth('admin')->check()) {
-                return $this->sendResponse(false, [], "You are not admin user", null, 400);
-            }
-
-            $validator = Validator::make([...$request->all(), 'id' => $id], [
-                'id' => 'required|exists:brands,brand_id',
-                'brand_name' => 'required|min:3|max:60|unique:brands,brand_name,' . $id . ',brand_id',
-                'logo' => 'required|min:5|max:190',
-                'website_url' => 'nullable|url|min:5|max:190',
-                'description' => 'required|min:5|max:200',
-                'address' => 'required|min:5|max:190',
-                'branches_no' => 'required|numeric|min:0|max:2000',
-                'tax_no' => 'required|min:15|max:15',
-                'cr_no' => 'required|min:10|max:10',
-                'cat_names' => 'required|array',
-                'cat_names.*' => 'required|exists:cats,cat_name',
-            ]);
-
-            $check = $this->checkValidator($validator);
-            if ($check) return $check;
-
-            $item = Brand::findOrFail($id);
-
-            DB::beginTransaction();
-            $item->update([
-                'brand_name' => $request->brand_name,
-                'logo' => $request->logo,
-                'website_url' => $request->website_url,
-                'description' => $request->description,
-                'address' => $request->address,
-                'branches_no' => $request->branches_no,
-                'tax_no' => $request->tax_no,
-                'cr_no' => $request->cr_no,
-            ]);
-
-            $cat_ids = Cat::withTrashed()->whereIn('cat_name', $request->cat_names)->pluck('cat_id')->toArray();
-            $item->cats()->sync($cat_ids);
-            DB::commit();
-
-            return $this->sendResponse(true, [
-                'item' => new  BrandResource($item),
-            ], trans('successfullUpdate'), null);
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
-    }
+    } 
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CatController;
 use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Brand\CampaignController;
 use App\Http\Controllers\Creator\CreatorController;
 use App\Models\AppConstants;
@@ -26,6 +27,12 @@ Route::put('creators/{id}/samplevideos', [CreatorController::class, 'samplevideo
 Route::put('creators/{id}/toggleActive/{state}', [CreatorController::class, 'toggleActive'])
     ->where(['id' => '[0-9]+', 'state' => '0|1']);
 // End::Creator ===================================================== //
+
+// Start::Brand ===================================================== //
+Route::resource('brands', BrandController::class);
+Route::put('brands/{id}/toggleActive/{state}', [BrandController::class, 'toggleActive'])
+    ->where(['id' => '[0-9]+', 'state' => '0|1']);
+// End::Brand ===================================================== //
 
 
 // Start::Campaign ================================================================= //

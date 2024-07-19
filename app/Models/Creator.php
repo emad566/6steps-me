@@ -75,7 +75,7 @@ class Creator extends Authenticatable
 
     public function getLogoAttribute($value)
     {
-        return  asset('storage/' . $value);
+        return $value? asset('storage/' . $value) : '';
     }
 
     public function sampleVideos(): HasMany

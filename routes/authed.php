@@ -30,7 +30,7 @@ Route::Delete('deleteFile', [FileController::class, 'deleteFile']);
 // Start::Files ===================================================== //
 
 // Start::Brand ===================================================== //
-Route::get('brands/{id}', [BrandController::class, 'show']);
+Route::resource('brands', BrandController::class)->only(['show', 'index']);
 // Start::Brand ===================================================== //
 
 // Start::Creator ===================================================== //

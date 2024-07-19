@@ -47,8 +47,9 @@ class CreatorController extends BaseApiController
         return $this->indexInit($request, function ($items) {
             if (!auth('admin')->check()) {
                 $items = $items->whereNull('deleted_at');
+                return [$items->whereNotNull('logo')];
             }
-            return [$items->whereNotNull('logo')];
+            return [$items];
         });
     }
 

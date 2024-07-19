@@ -23,11 +23,15 @@ class Admin extends Authenticatable
     protected $primaryKey = 'admin_id';
 
     protected $fillable = [
-        'email',
+        'admin_id',
         'admin_name',
+        'email',
+        'mobile',
+        'logo', 
+        'address',
+        'websit_url',
         'email_verified_at',
         'password',
-        'mobile',
 
         'deleted_at',
         'created_at',
@@ -52,4 +56,9 @@ class Admin extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getLogoAttribute($value)
+    {
+        return $value? asset('storage/' . $value) : '';
+    }
 }

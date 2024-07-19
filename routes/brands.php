@@ -10,7 +10,7 @@ Route::put('updateProfile/{id}', [BrandAuthController::class, 'updateProfile']);
 // End:: Brand ================================================================= //
 
 // Start::Campaign ================================================================= //
-Route::resource('campaigns', CampaignController::class);
-Route::put('campaigns/{id}/toggleActive/{state}', [CampaignController::class, 'toggleActive'])
-    ->where(['id' => '[0-9]+', 'state' => '0|1']);
+Route::resource('campaigns', CampaignController::class)->except(['destroy']);
+Route::put('campaigns/{id}/updateStatus', [CampaignController::class, 'updateStatus'])
+->where(['id' => '[0-9]+']);
 // End::Campaign ================================================================= //

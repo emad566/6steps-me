@@ -12,7 +12,11 @@ abstract class AppConstants
         'page' => 'nullable|numeric|min:1|max:1000',
         'sortDirection' => 'nullable|in:ASC,DESC',
         'dateFrom' => 'nullable|date_format:Y-m-d H:i:s',
-        'dateTo' => 'nullable|date_format:Y-m-d H:i:s',
-
+        'dateTo' => 'nullable|date_format:Y-m-d H:i:s', 
     ];
+
+    static public $campain_states = [
+        'UnderReview', 'Rejected', 'Active', 'Complete', 'Stoped', 'Ended', 
+    ]; 
+    
 }

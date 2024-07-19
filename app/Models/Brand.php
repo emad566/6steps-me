@@ -79,4 +79,9 @@ class Brand extends Authenticatable
     {
         return $this->morphToMany(Cat::class, 'catable');
     }
+
+    public function campaigns(): HasMany
+    {
+        return $this->hasMany(Campaign::class, 'brand_id', 'brand_id');
+    }
 }

@@ -14,5 +14,14 @@
     "inActiveAccount": "حساب معطل",
     "Listed": "تم جلب البيانات",
     "CategoryHasBeenCreated": "تم انشاء القائمة",
-    "NotValidEmail": "بريد الكتروني غير موثوق"
+    "NotValidEmail": "بريد الكتروني غير موثوق",
+    "youAreNotAllowedToDoThisAction": " غير مسموح لك بتنفيذ هذه العملية ",
+    "Under review": "قيد المراجعة",
+    "UnderReview": "قيد المراجعة",
+    "Rejected": "مرفوض",
+    "Active": "نشط",
+    "Complete": "مكتمل",
+    "Stoped": "متوقف",
+    "Ended": "منتهي",
+    "CampaignHasBeenCreated": "تم انشاء الحملة بنجاح"
 }

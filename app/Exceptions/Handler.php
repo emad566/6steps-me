@@ -6,6 +6,7 @@ use App\Http\Controllers\API\BaseApiController;
 use Illuminate\Auth\AuthenticationException;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -45,6 +46,11 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            $baseApiController = new BaseApiController();
+            return $baseApiController->sendResponse(false, [], 'The url ' . $request->url() . ' could not be found.', [], 404);
+        }
+
         if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             $baseApiController = new BaseApiController();
             return $baseApiController->sendResponse(false, [], 'The url ' . $request->url() . ' could not be found.', [], 404);

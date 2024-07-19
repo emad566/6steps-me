@@ -16,5 +16,15 @@
     "inActiveAccount": "In active account",
     "Listed": "Listed",
     "CategoryHasBeenCreated": "Category has been created",
-    "NotValidEmail": "Not valid email"
+    "NotValidEmail": "Not valid email",
+    "youAreNotAllowedToDoThisAction": "You are not allowed to do this action",
+    "Under review": "Under review", 
+    "UnderReview": "Under review", 
+    "Rejected": "Rejected", 
+    "Active": "Active", 
+    "Complete": "Complete", 
+    "Stoped": "Stoped", 
+    "Ended": "Ended",
+    "CampaignHasBeenCreated": "Campaign has been created"
+
 }

@@ -83,6 +83,8 @@ class Creator extends Authenticatable
         return $this->hasMany(CreatorSamplevideo::class, 'creator_id', 'creator_id');
     }
 
+   
+
     public function cats(): MorphToMany
     {
         return $this->morphToMany(Cat::class, 'catable');

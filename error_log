@@ -1,0 +1,40 @@
+[17-Jul-2024 18:16:28 UTC] PHP Warning:  require(/home/theglow/api.6stepsa.com/vendor/composer/../../App/Helpers/general.php): Failed to open stream: No such file or directory in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php on line 41
+[17-Jul-2024 18:16:28 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/theglow/api.6stepsa.com/vendor/composer/../../App/Helpers/general.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php(45): {closure}()
+#1 /home/theglow/api.6stepsa.com/vendor/autoload.php(25): ComposerAutoloaderInit2422a009da52629f8a14d09d95e58706::getLoader()
+#2 /home/theglow/api.6stepsa.com/artisan(18): require('/home/theglow/a...')
+#3 {main}
+  thrown in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php on line 41
+[17-Jul-2024 18:16:35 UTC] PHP Warning:  require(/home/theglow/api.6stepsa.com/vendor/composer/../../App/Helpers/general.php): Failed to open stream: No such file or directory in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php on line 41
+[17-Jul-2024 18:16:35 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/theglow/api.6stepsa.com/vendor/composer/../../App/Helpers/general.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php(45): {closure}()
+#1 /home/theglow/api.6stepsa.com/vendor/autoload.php(25): ComposerAutoloaderInit2422a009da52629f8a14d09d95e58706::getLoader()
+#2 /home/theglow/api.6stepsa.com/artisan(18): require('/home/theglow/a...')
+#3 {main}
+  thrown in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php on line 41
+[17-Jul-2024 18:16:45 UTC] PHP Warning:  require(/home/theglow/api.6stepsa.com/vendor/composer/../../App/Helpers/general.php): Failed to open stream: No such file or directory in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php on line 41
+[17-Jul-2024 18:16:45 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/theglow/api.6stepsa.com/vendor/composer/../../App/Helpers/general.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php(45): {closure}()
+#1 /home/theglow/api.6stepsa.com/vendor/autoload.php(25): ComposerAutoloaderInit2422a009da52629f8a14d09d95e58706::getLoader()
+#2 /home/theglow/api.6stepsa.com/artisan(18): require('/home/theglow/a...')
+#3 {main}
+  thrown in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php on line 41
+[17-Jul-2024 18:16:55 UTC] PHP Warning:  require(/home/theglow/api.6stepsa.com/vendor/composer/../../App/Helpers/general.php): Failed to open stream: No such file or directory in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php on line 41
+[17-Jul-2024 18:16:55 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/theglow/api.6stepsa.com/vendor/composer/../../App/Helpers/general.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php(45): {closure}()
+#1 /home/theglow/api.6stepsa.com/vendor/autoload.php(25): ComposerAutoloaderInit2422a009da52629f8a14d09d95e58706::getLoader()
+#2 /home/theglow/api.6stepsa.com/artisan(18): require('/home/theglow/a...')
+#3 {main}
+  thrown in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php on line 41
+[17-Jul-2024 18:17:03 UTC] PHP Warning:  require(/home/theglow/api.6stepsa.com/vendor/composer/../../App/Helpers/general.php): Failed to open stream: No such file or directory in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php on line 41
+[17-Jul-2024 18:17:03 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/theglow/api.6stepsa.com/vendor/composer/../../App/Helpers/general.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php(45): {closure}()
+#1 /home/theglow/api.6stepsa.com/vendor/autoload.php(25): ComposerAutoloaderInit2422a009da52629f8a14d09d95e58706::getLoader()
+#2 /home/theglow/api.6stepsa.com/artisan(18): require('/home/theglow/a...')
+#3 {main}
+  thrown in /home/theglow/api.6stepsa.com/vendor/composer/autoload_real.php on line 41

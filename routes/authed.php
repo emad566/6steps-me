@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\API\FileController;
 use App\Http\Controllers\Brand\BrandAuthController;
 use App\Http\Controllers\Brand\BrandController;
+use App\Http\Controllers\Brand\CampaignController;
 use App\Http\Controllers\Creator\CreatorAuthController;
 use App\Http\Controllers\Creator\CreatorController;
 use Illuminate\Http\Request;
@@ -44,3 +45,7 @@ Route::get('cities', [CityController::class, 'index']);
 // Start::City ===================================================== //
 Route::get('cities', [CityController::class, 'index']);
 // Start::City ===================================================== //
+
+// Start::Campaign ================================================================= //
+Route::get('campaigns', [CampaignController::class,  'index']);
+// End::Campaign ================================================================= //

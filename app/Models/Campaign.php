@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Traits\CreatedUpdatedFormat;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
@@ -17,10 +18,12 @@ class Campaign extends Model
      * @var array<int, string>
      */
     protected $table = 'campaigns';
-    protected $primaryKey = 'campaign_id';
+    protected $primaryKey = 'campaign_id'; 
 
     protected $fillable = [
         'campaign_id',
+        'campaign_no',
+        'brand_id',
         'campaign_title',
         'campaign_description',
         'start_at',
@@ -39,6 +42,7 @@ class Campaign extends Model
         'is_instagram',
         'is_youtube',
         'is_sent_to_content_creator',
+        'campaign_status',
 
         'deleted_at',
         'created_at',
@@ -48,6 +52,11 @@ class Campaign extends Model
     public function getProductImageAttribute($value)
     {
         return  asset('storage/' . $value);
+    }
+
+    public function brand(): HasOne
+    {
+        return $this->hasOne(Brand::class, 'brand_id', 'brand_id');
     }
 
     public function cats(): MorphToMany

@@ -2,20 +2,27 @@
 
 namespace App\Http\Resources;
 
+use App\Models\AppConstants;
+use App\Services\CreatedUpdatedHuman;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CampaignResource extends JsonResource
-{
+{ 
     /**
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
-    {
+    {   
+        $human = new CreatedUpdatedHuman($this);
         return [
             'campaign_id' => $this->campaign_id,
+            'campaign_no' => $this->campaign_no,
+            'brand_name' => $this->brand?->brand_name,
+            'campaign_status_trans' => trans($this->campaign_status?? AppConstants::$campain_states[0]),
+            'campaign_status' => $this->campaign_status?? AppConstants::$campain_states[0],
             'campaign_title' => $this->campaign_title,
             'campaign_description' => $this->campaign_description,
             'start_at' => $this->start_at,
@@ -40,6 +47,7 @@ class CampaignResource extends JsonResource
             'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            ...$human->human,
         ];
     }
 }

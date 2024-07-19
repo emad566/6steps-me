@@ -5,16 +5,25 @@ namespace App\Http\Controllers\Brand;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Traits\ControllerTrait;
 use App\Http\Resources\CampaignResource;
+use App\Http\Traits\DistroyTrait;
+use App\Http\Traits\EditTrait;
+use App\Http\Traits\IndexTrait;
+use App\Http\Traits\ShowTrait;
+use App\Http\Traits\ToggleActiveTrait;
+use App\Models\AppConstants;
 use App\Models\Campaign;
 use App\Models\Cat;
 use App\Models\City;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CampaignController extends BaseApiController
 {
-    use ControllerTrait;
+    use IndexTrait, ShowTrait, EditTrait, DistroyTrait, ToggleActiveTrait;
 
     protected $table = 'campaigns';
     protected $model = Campaign::class;
@@ -22,6 +31,8 @@ class CampaignController extends BaseApiController
 
     protected $columns = [
         'campaign_id',
+        'brand_id',
+        'campaign_no',
         'campaign_title',
         'campaign_description',
         'start_at',
@@ -40,11 +51,25 @@ class CampaignController extends BaseApiController
         'is_instagram',
         'is_youtube',
         'is_sent_to_content_creator',
+        'campaign_status',
 
         'deleted_at',
         'created_at',
         'updated_at',
     ];
+
+    function index(Request $request) {
+        return $this->indexInit($request, function ($items) {
+            if (!auth('admin')->check()) {
+                $items = $items->whereNull('deleted_at');
+            }
+            return [$items];
+        });
+    }
+
+    function show($id) {
+        return $this->showInit($id);
+    }
 
 
     public function create()
@@ -64,11 +89,23 @@ class CampaignController extends BaseApiController
     public function store(Request $request)
     {
         try {
+            $brand_id_state = 'nullable';
+            
+            if(auth('admin')->check()){
+                $brand_id_state = 'required';
+                $brand_id =$request->brand_id;
+            }else if(auth('brand')->check()){
+                $brand_id = Auth::user()->brand_id;
+            }else{
+                return $this->sendResponse(false, null, 'You are not allowed to create campaign', null, 401);
+            }
+
             $validator = Validator::make($request->all(), [
+                'brand_id' => $brand_id_state .'|exists:brands,brand_id',
                 'campaign_title' => 'required|min:10|max:190|unique:campaigns,campaign_title',
                 'campaign_description' => 'required|min:20|max:200',
-                'start_at' => 'required|date|date_format:Y-m-d H:i:s',
-                'close_at' => 'required|date|date_format:Y-m-d H:i:s',
+                'start_at' => 'required|date|date_format:Y-m-d H:i:s|after:' . Carbon::now(),
+                'close_at' => 'required|date|date_format:Y-m-d H:i:s|after:' . Carbon::now(),
                 'conditions' => 'required|min:20|max:200',
                 'product_image' => 'required|min:10|max:190',
                 'ugc_no' => 'required|numeric|min:1|max:100',
@@ -92,9 +129,17 @@ class CampaignController extends BaseApiController
             $check = $this->checkValidator($validator);
             if ($check) return $check;
 
+            $campaignCode = Str::random(8); 
+            
+            while (Campaign::where('campaign_no', $campaignCode)->exists()) {
+                $campaignCode = Str::random(8);
+            } 
+ 
             DB::beginTransaction();
             $item = Campaign::create([
                 'campaign_title' => $request->campaign_title,
+                'campaign_no' =>  $campaignCode,
+                'brand_id' => $brand_id,
                 'campaign_description' => $request->campaign_description,
                 'start_at' => $request->start_at,
                 'close_at' => $request->close_at,
@@ -118,7 +163,7 @@ class CampaignController extends BaseApiController
             ]);
 
             $cat_ids = Cat::withTrashed()->whereIn('cat_name', $request->cat_names)->pluck('cat_id')->toArray();
-            $item->cats()->sync($cat_ids);
+            $item->cats()->sync($cat_ids); 
 
             $city_ids = City::withTrashed()->whereIn('city_name', $request->city_names)->pluck('city_id')->toArray();
             $item->cities()->sync($city_ids);
@@ -126,13 +171,16 @@ class CampaignController extends BaseApiController
 
             return $this->sendResponse(true, [
                 'item' => new CampaignResource($item),
-            ], trans('CampaignegoryHasBeenCreated'));
+            ], trans('CampaignHasBeenCreated'));
         } catch (\Throwable $th) {
             DB::rollBack();
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
 
+    function edit($id) {
+        return $this->editInit($id);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -145,7 +193,7 @@ class CampaignController extends BaseApiController
                 'campaign_title' => 'required|min:10|max:190|unique:campaigns,campaign_title,' . $id . ',campaign_id',
                 'campaign_description' => 'required|min:20|max:200',
                 'start_at' => 'required|date|date_format:Y-m-d H:i:s',
-                'close_at' => 'required|date|date_format:Y-m-d H:i:s',
+                'close_at' => 'required|date|date_format:Y-m-d H:i:s|after:' . Carbon::now(),
                 'conditions' => 'required|min:20|max:200',
                 'product_image' => 'required|min:10|max:190',
                 'ugc_no' => 'required|numeric|min:1|max:100',
@@ -169,8 +217,13 @@ class CampaignController extends BaseApiController
             if ($check) return $check;
             $item = Campaign::withTrashed()->where('campaign_id', $id)->first();
 
+            if(!auth('admin')->check() && $item->brand_id != Auth::user()->brand_id){
+                return $this->sendResponse(false, null, trans('youAreNotAllowedToDoThisAction'), null, 401);
+            }
+
             DB::beginTransaction();
             $item->update([
+                'campaign_status' => AppConstants::$campain_states[0],
                 'campaign_title' => $request->campaign_title,
                 'campaign_description' => $request->campaign_description,
                 'start_at' => $request->start_at,
@@ -203,6 +256,40 @@ class CampaignController extends BaseApiController
             ], trans('successfullUpdate'), null);
         } catch (\Throwable $th) {
             DB::rollBack();
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
+        }
+    }
+
+    function destroy($id) {
+        return $this->destroyInit($id);
+    }
+
+    function toggleActive($id, $state) {
+        return $this->toggleActiveInit($id, $state);
+    }
+
+    function updateStatus(Request $request, $id) {
+        try{ 
+            $campain_statesArr = auth('brand')->check()? ['Active', 'Ended', 'Stoped'] : AppConstants::$campain_states;
+            $validator = Validator::make([$this->columns[0] => $id, ...$request->all()], [
+                $this->columns[0] => 'required|exists:' . $this->table . ',' . $this->columns[0],
+                'campaign_status' => 'required|in:' .implode(',', $campain_statesArr),
+            ]);
+
+            $check = $this->checkValidator($validator);
+            if ($check) return $check;
+
+            $item = $this->model::withTrashed()->where($this->columns[0], $id)->first();
+
+            if (auth('brand')->check() && !in_array($item->campaign_status, ['Ended', 'Stoped', 'Active'])){ 
+                return $this->sendResponse(false, null, trans('youAreNotAllowedToDoThisAction'), null, 401);
+            }
+
+            $item->update(['campaign_status' => $request->campaign_status]);
+            return $this->sendResponse(true, [
+                'item' => new CampaignResource($item),
+            ], trans('successfullUpdate'), null);
+        } catch (\Throwable $th) { 
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }

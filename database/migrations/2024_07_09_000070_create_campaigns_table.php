@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AppConstants;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,9 +14,11 @@ return new class extends Migration
     {
         Schema::create('campaigns', function (Blueprint $table) {
             $table->bigIncrements('campaign_id');
+            $table->string('campaign_no')->unique();
+            $table->bigInteger('brand_id')->unsigned();
             $table->string('campaign_title');
             $table->text('campaign_description', 1000);
-            $table->string('start_at');
+            $table->string('start_at'); 
             $table->string('close_at');
             $table->text('conditions', 1000);
             $table->string('product_image');
@@ -31,6 +34,7 @@ return new class extends Migration
             $table->boolean('is_instagram');
             $table->boolean('is_youtube');
             $table->boolean('is_sent_to_content_creator')->default(1);
+            $table->enum('campaign_status', AppConstants::$campain_states)->default(AppConstants::$campain_states['0']);
 
 
             $table->timestamp('deleted_at')->nullable();

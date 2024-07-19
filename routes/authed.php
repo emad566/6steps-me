@@ -34,7 +34,7 @@ Route::get('brands/{id}', [BrandController::class, 'show']);
 // Start::Brand ===================================================== //
 
 // Start::Creator ===================================================== //
-Route::get('creators/{id}', [CreatorController::class, 'show']);
+Route::resource('creators', CreatorController::class)->only(['show', 'index']);
 // Start::Creator ===================================================== //
 
 // Start::Category ===================================================== //

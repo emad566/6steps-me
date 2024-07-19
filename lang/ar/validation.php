@@ -37,7 +37,7 @@ return array(
         'logo' => 'الشعار',
         'bio' => 'الملخص',
         'address' => 'العنوان',
-        'brith_date' => 'تاريخ الميلاد',
+        'birth_date' => 'تاريخ الميلاد',
         'IBAN_no' => 'رقم ال IBAN ',
         'Mawthooq_no' => 'رقم التوثيق',
 

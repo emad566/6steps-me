@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Brand;
 
-use App\Http\Controllers\API\BaseApiController;
-use App\Http\Traits\ControllerTrait;
+use App\Http\Controllers\API\BaseApiController; 
 use App\Http\Resources\CampaignResource;
 use App\Http\Traits\DistroyTrait;
 use App\Http\Traits\EditTrait;

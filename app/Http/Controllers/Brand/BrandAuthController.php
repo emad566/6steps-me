@@ -142,7 +142,7 @@ class BrandAuthController extends BaseApiController
 
             return $this->sendResponse(true, [
                 'item' => new  BrandResource($item),
-            ], trans('successfullLogin'), null);
+            ], trans('successfullUpdate'), null);
         } catch (\Throwable $th) {
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }

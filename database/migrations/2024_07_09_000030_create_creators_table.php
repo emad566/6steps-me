@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('IBAN_no')->nullable();
             $table->string('Mawthooq_no')->nullable();
-            $table->date('brith_date')->nullable();
+            $table->date('birth_date')->nullable();
 
 
             $table->timestamp('deleted_at')->nullable();

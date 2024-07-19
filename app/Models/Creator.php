@@ -41,7 +41,7 @@ class Creator extends Authenticatable
         'address',
         'IBAN_no',
         'Mawthooq_no',
-        'brith_date',
+        'birth_date',
 
         'deleted_at',
         'created_at',

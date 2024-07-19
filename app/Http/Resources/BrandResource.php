@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Services\CreatedUpdatedHuman;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,6 +15,7 @@ class BrandResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $human = new CreatedUpdatedHuman($this);
         return [
             'brand_id' => $this->brand_id,
             'brand_name' => $this->brand_name,
@@ -32,6 +34,7 @@ class BrandResource extends JsonResource
             'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            ...$human->human
         ];
     }
 }

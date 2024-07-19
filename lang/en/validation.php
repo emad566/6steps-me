@@ -37,7 +37,7 @@ return array(
         'logo' => 'Logo',
         'bio' => 'Bio',
         'address' => 'Address',
-        'brith_date' => 'Brith date',
+        'birth_date' => 'Brith date',
         'IBAN_no' => 'Iban no',
         'Mawthooq_no' => 'Mawthooq no',
     ],

@@ -94,7 +94,7 @@ class CreatorAuthController extends BaseApiController
 
     function updateProfile(Request $request, $id)
     {
-        // try {
+        try {
             if (auth()->user()->creator_id != $id && !auth('admin')->check()) {
                 return $this->sendResponse(false, [], "You are not admin user", null, 400);
             }
@@ -105,7 +105,7 @@ class CreatorAuthController extends BaseApiController
                 'logo' => 'required|min:6|max:190',
                 'bio' => 'required|min:10|max:200',
                 'address' => 'required|min:10|max:190',
-                'brith_date' => 'required|date|after:1925-07-11|before:' . Carbon::now()->subYears(10),
+                'birth_date' => 'required|date|after:1925-07-11|before:' . Carbon::now()->subYears(10),
                 'IBAN_no' => 'nullable|regex:/^SA\d{22}$/|size:24',
                 'Mawthooq_no' => 'nullable|min:5|max:20',
                 'cat_names' => 'required|array',
@@ -128,7 +128,7 @@ class CreatorAuthController extends BaseApiController
                 'logo' => $request->logo ?? $creator->logo,
                 'bio' => $request->bio ?? $creator->bio,
                 'address' => $request->address ?? $creator->address,
-                'brith_date' => $request->brith_date ?? $creator->brith_date,
+                'birth_date' => $request->birth_date ?? $creator->birth_date,
                 'IBAN_no' => $request->IBAN_no ?? $creator->IBAN_no,
                 'Mawthooq_no' => $request->Mawthooq_no ?? $creator->Mawthooq_no,
             ]);
@@ -147,9 +147,9 @@ class CreatorAuthController extends BaseApiController
 
             return $this->sendResponse(true, [
                 'item' => new  CreatorResource($creator),
-            ], trans('successfullLogin'), null);
-        // } catch (\Throwable $th) {
-        //     return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        // }
+            ], trans('successfullUpdate'), null);
+        } catch (\Throwable $th) {
+            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
+        }
     }
 }

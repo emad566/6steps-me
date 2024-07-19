@@ -5,6 +5,10 @@ use App\Http\Controllers\Creator\CreatorController;
 use Illuminate\Support\Facades\Route;
 
 
-// Start:: Brand ================================================================= //
+// Start:: Creator ================================================================= //
 Route::put('updateProfile/{id}', [CreatorAuthController::class, 'updateProfile']);
-// End:: Brand ================================================================= //
+Route::resource('creators', CreatorController::class)->except(['destroy', 'store', 'create']);
+Route::put('creators/{id}/samplevideos', [CreatorController::class, 'samplevideos'])
+    ->where(['id' => '[0-9]+']); 
+// End::Creator ===================================================== //
+

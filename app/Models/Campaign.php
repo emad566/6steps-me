@@ -43,6 +43,7 @@ class Campaign extends Model
         'is_youtube',
         'is_sent_to_content_creator',
         'campaign_status',
+        'reject_reason',
 
         'deleted_at',
         'created_at',

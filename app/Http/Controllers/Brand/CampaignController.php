@@ -51,6 +51,7 @@ class CampaignController extends BaseApiController
         'is_youtube',
         'is_sent_to_content_creator',
         'campaign_status',
+        'reject_reason',
 
         'deleted_at',
         'created_at',
@@ -270,9 +271,12 @@ class CampaignController extends BaseApiController
     function updateStatus(Request $request, $id) {
         try{ 
             $campain_statesArr = auth('brand')->check()? ['Active', 'Ended', 'Stoped'] : AppConstants::$campain_states;
+            $requiredRejectReason = $request->campaign_status == 'Rejected'? 'required' : 'nullable';
+
             $validator = Validator::make([$this->columns[0] => $id, ...$request->all()], [
                 $this->columns[0] => 'required|exists:' . $this->table . ',' . $this->columns[0],
                 'campaign_status' => 'required|in:' .implode(',', $campain_statesArr),
+                'reject_reason' => $requiredRejectReason . '|min:5|max:500',
             ]);
 
             $check = $this->checkValidator($validator);
@@ -285,6 +289,10 @@ class CampaignController extends BaseApiController
             }
 
             $item->update(['campaign_status' => $request->campaign_status]);
+            if($request->campaign_status){
+                $item->update(['reject_reason' => $request->reject_reason]); 
+            }
+            
             return $this->sendResponse(true, [
                 'item' => new CampaignResource($item),
             ], trans('successfullUpdate'), null);

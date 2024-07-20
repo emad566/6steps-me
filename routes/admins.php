@@ -4,8 +4,7 @@ use App\Http\Controllers\Admin\CatController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Brand\CampaignController;
-use App\Http\Controllers\Creator\CreatorController;
-use App\Models\AppConstants;
+use App\Http\Controllers\Creator\CreatorController; 
 use Illuminate\Support\Facades\Route;
 
 // Start::Category ===============================================//

@@ -23,6 +23,7 @@ class CampaignResource extends JsonResource
             'brand_name' => $this->brand?->brand_name,
             'campaign_status_trans' => trans($this->campaign_status?? AppConstants::$campain_states[0]),
             'campaign_status' => $this->campaign_status?? AppConstants::$campain_states[0],
+            'reject_reason' => $this->reject_reason,
             'campaign_title' => $this->campaign_title,
             'campaign_description' => $this->campaign_description,
             'start_at' => $this->start_at,

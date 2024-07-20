@@ -40,4 +40,5 @@ class AdminAuthController  extends BaseApiController
             return $this->sendResponse(false, null, trans('technicalError'), null, 500);
         }
     }
+ 
 }

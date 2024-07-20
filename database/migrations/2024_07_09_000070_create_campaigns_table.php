@@ -35,8 +35,9 @@ return new class extends Migration
             $table->boolean('is_youtube');
             $table->boolean('is_sent_to_content_creator')->default(1);
             $table->enum('campaign_status', AppConstants::$campain_states)->default(AppConstants::$campain_states['0']);
+            $table->text('reject_reason', 1000)->nullable();
 
-
+ 
             $table->timestamp('deleted_at')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();

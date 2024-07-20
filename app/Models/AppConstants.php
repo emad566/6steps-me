@@ -18,5 +18,13 @@ abstract class AppConstants
     static public $campain_states = [
         'UnderReview', 'Rejected', 'Active', 'Complete', 'Stoped', 'Ended', 
     ]; 
+
+    static public $request_states = [
+        'RequestRecieved', 'RequestAccepted', 'RequestRejected', 'RequestCompleted', 'CampaignCompleted'
+    ]; 
+
+    static public $video_states = [
+        'VideoRecieved', 'VideoAccepted', 'VideoRejected'
+    ]; 
     
 }

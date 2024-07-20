@@ -15,6 +15,10 @@ abstract class AppConstants
         'dateTo' => 'nullable|date_format:Y-m-d H:i:s', 
     ];
 
+    static public $statusable_types = [
+        'Campaign', 'CampainRequest', 'RequestVideo',
+    ]; 
+
     static public $campain_states = [
         'UnderReview', 'Rejected', 'Active', 'Complete', 'Stoped', 'Ended', 
     ]; 

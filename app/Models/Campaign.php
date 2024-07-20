@@ -69,4 +69,9 @@ class Campaign extends Model
     {
         return $this->morphToMany(City::class, 'cityable');
     }
+
+    public function statusables()
+    {
+        return $this->hasMany(Statusable::class, 'statusable_id', 'campaign_id')->where('statusable_type', 'Campaign');
+    }
 }

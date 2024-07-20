@@ -13,6 +13,7 @@ use App\Models\AppConstants;
 use App\Models\Campaign;
 use App\Models\Cat;
 use App\Models\City;
+use App\Models\Statusable;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -167,6 +168,13 @@ class CampaignController extends BaseApiController
 
             $city_ids = City::withTrashed()->whereIn('city_name', $request->city_names)->pluck('city_id')->toArray();
             $item->cities()->sync($city_ids);
+
+            Statusable::create([
+                'statusable_id' => $item->id,
+                'statusable_type' => 'Campaign',
+                'status' => 'UnderReview',
+            ]);
+
             DB::commit();
 
             return $this->sendResponse(true, [
@@ -249,6 +257,12 @@ class CampaignController extends BaseApiController
 
             $city_ids = City::withTrashed()->whereIn('city_name', $request->city_names)->pluck('city_id')->toArray();
             $item->cities()->sync($city_ids);
+
+            Statusable::create([
+                'statusable_id' => $item->id,
+                'statusable_type' => 'Campaign',
+                'status' => 'UnderReview',
+            ]);
             DB::commit();
 
             return $this->sendResponse(true, [
@@ -292,6 +306,13 @@ class CampaignController extends BaseApiController
             if($request->campaign_status){
                 $item->update(['reject_reason' => $request->reject_reason]); 
             }
+            
+            Statusable::create([
+                'statusable_id' => $item->id,
+                'statusable_type' => 'Campaign',
+                'status' => $request->campaign_status,
+                'reason' => $request->reject_reason,
+            ]);
             
             return $this->sendResponse(true, [
                 'item' => new CampaignResource($item),

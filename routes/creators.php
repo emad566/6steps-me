@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Brand\CampaignRequestController;
+use App\Http\Controllers\Brand\RequestVideoController;
 use App\Http\Controllers\Creator\CreatorAuthController;
 use App\Http\Controllers\Creator\CreatorController;
 use Illuminate\Support\Facades\Route;
@@ -16,3 +17,7 @@ Route::put('creators/{id}/samplevideos', [CreatorController::class, 'samplevideo
 // Start::CampaignRequest ================================================================= //
 Route::resource('requests', CampaignRequestController::class)->only(['create','store','edit','update']);
 // End::CampaignRequest ================================================================= //
+
+// Start::RequestVideo ================================================================= //
+Route::resource('requestvideos', RequestVideoController::class)->only(['create','store','edit','update']);
+// End::RequestVideo ================================================================= //

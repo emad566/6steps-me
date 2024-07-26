@@ -30,7 +30,7 @@ class CampaignController extends BaseApiController
     protected $resource = CampaignResource::class;
 
     protected $columns = [
-        'campaign_id',
+        'campaign_id', 
         'brand_id',
         'campaign_no',
         'campaign_title',
@@ -62,6 +62,10 @@ class CampaignController extends BaseApiController
     function index(Request $request) {
         return $this->indexInit($request, function ($items) {
             if (!auth('admin')->check()) {
+                if(auth('creator')->check()){
+                    $items = $items->where('campaign_status', 'Active');
+                }
+                $items = $items->where(Authed()->primaryKey, Authed()->id);
                 $items = $items->whereNull('deleted_at');
             }
             return [$items];
@@ -69,7 +73,18 @@ class CampaignController extends BaseApiController
     }
 
     function show($id) {
-        return $this->showInit($id);
+        return $this->showInit($id, function ($item){
+            if (!auth('admin')->check()) {
+                $pKey = Authed()->primaryKey; 
+                if($item->$pKey != Authed()->id || $item->deleted_at){
+                    return [
+                        false,
+                        $this->sendResponse(false, null, trans('youAreNotAllowedToDoThisAction'), null, 401)
+                    ];
+                } 
+            }
+            return [$item];
+        });
     }
 
 
@@ -130,6 +145,8 @@ class CampaignController extends BaseApiController
             $check = $this->checkValidator($validator);
             if ($check) return $check;
 
+            
+
             $campaignCode = Str::random(8); 
             
             while (Campaign::where('campaign_no', $campaignCode)->exists()) {
@@ -186,7 +203,18 @@ class CampaignController extends BaseApiController
     }
 
     function edit($id) {
-        return $this->editInit($id);
+        return $this->editInit($id, function ($item){
+            if (!auth('admin')->check()) {
+                $pKey = Authed()->primaryKey; 
+                if($item->$pKey != Authed()->id || $item->deleted_at){
+                    return [
+                        false,
+                        $this->sendResponse(false, null, trans('youAreNotAllowedToDoThisAction'), null, 401)
+                    ];
+                } 
+            }
+            return [$item];
+        });
     }
 
     /**
@@ -208,12 +236,12 @@ class CampaignController extends BaseApiController
                 'video_seconds_min' => 'required|numeric|min:1|max:10800',
                 'video_seconds_max' => 'required|numeric|min:1|max:10800',
                 'video_price' => 'required|min:1|max:10000',
-                'is_usg_show' => 'required|in:0,1',
-                'is_brand_show' => 'required|in:0,1',
-                'is_tiktok' => 'required|in:0,1',
-                'is_instagram' => 'required|in:0,1',
-                'is_youtube' => 'required|in:0,1',
-                'is_sent_to_content_creator' => 'required|in:0,1',
+                'is_usg_show' => 'required|in:0,1,true,false',
+                'is_brand_show' => 'required|in:0,1,true,false',
+                'is_tiktok' => 'required|in:0,1,true,false',
+                'is_instagram' => 'required|in:0,1,true,false',
+                'is_youtube' => 'required|in:0,1,true,false',
+                'is_sent_to_content_creator' => 'required|in:0,1,true,false',
                 'cat_names' => 'required|array',
                 'cat_names.*' => 'required|exists:cats,cat_name',
                 'city_names' => 'required|array',

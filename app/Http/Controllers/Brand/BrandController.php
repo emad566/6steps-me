@@ -83,8 +83,8 @@ class BrandController extends BaseApiController
                 'description' => 'required|min:5|max:200',
                 'address' => 'required|min:5|max:190',
                 'branches_no' => 'required|numeric|min:0|max:2000',
-                'tax_no' => 'required|min:15|max:15',
-                'cr_no' => 'required|min:10|max:10',
+                'tax_no' => 'nullable|min:15|max:15',
+                'cr_no' => 'nullable|min:10|max:10',
                 'cat_names' => 'required|array',
                 'cat_names.*' => 'required|exists:cats,cat_name',
             ]);
@@ -139,8 +139,8 @@ class BrandController extends BaseApiController
                 'description' => 'required|min:5|max:200',
                 'address' => 'required|min:5|max:190',
                 'branches_no' => 'required|numeric|min:0|max:2000',
-                'tax_no' => 'required|min:15|max:15',
-                'cr_no' => 'required|min:10|max:10',
+                'tax_no' => 'nullable|min:15|max:15',
+                'cr_no' => 'nullable|min:10|max:10',
                 'cat_names' => 'required|array',
                 'cat_names.*' => 'required|exists:cats,cat_name',
             ]);
@@ -152,7 +152,7 @@ class BrandController extends BaseApiController
             $email = auth('admin')->check()? $request->email : $item->email;
 
             DB::beginTransaction();
-            $item->update([
+            $item->update([ 
                 'brand_name' => $request->brand_name,
                 'email' =>$email,
                 'logo' => $request->logo,

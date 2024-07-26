@@ -26,7 +26,7 @@ class BrandResource extends JsonResource
             'website_url' => $this->website_url,
             'description' => $this->description,
             'address' => $this->address,
-            'branches_no' => $this->branches_no,
+            'branches_no' => (string)$this->branches_no,
             'tax_no' => $this->tax_no,
             'cr_no' => $this->cr_no,
 

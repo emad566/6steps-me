@@ -3,6 +3,7 @@
 use App\Http\Controllers\Brand\CampaignController;
 use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Brand\CampaignRequestController;
+use App\Http\Controllers\Brand\RequestVideoController;
 use App\Models\CampaignRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +24,10 @@ Route::put('campaigns/{id}/updateStatus', [CampaignController::class, 'updateSta
 Route::put('requests/{id}/updateStatus', [CampaignRequestController::class, 'updateStatus'])
 ->where(['id' => '[0-9]+']);
 // End::CampaignRequest ================================================================= //
+
+// Start::RequestVideo ================================================================= //
+Route::put('requestvideos/{id}/updateStatus', [RequestVideoController::class, 'updateStatus'])
+->where(['id' => '[0-9]+']);
+// End::RequestVideo ================================================================= //
 
 

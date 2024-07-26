@@ -8,6 +8,7 @@ use App\Http\Controllers\Brand\BrandAuthController;
 use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Brand\CampaignController;
 use App\Http\Controllers\Brand\CampaignRequestController;
+use App\Http\Controllers\Brand\RequestVideoController;
 use App\Http\Controllers\Creator\CreatorAuthController;
 use App\Http\Controllers\Creator\CreatorController;
 use Illuminate\Http\Request;
@@ -54,4 +55,8 @@ Route::get('campaigns', [CampaignController::class,  'index']);
 // Start::CampaignRequest ================================================================= //
 Route::resource('requests', CampaignRequestController::class)->only(['index', 'show']);
 // End::CampaignRequest ================================================================= //
+
+// Start::RequestVideo ================================================================= //
+Route::resource('requestvideos', RequestVideoController::class)->only(['index', 'show']);
+// End::RequestVideo ================================================================= //
 

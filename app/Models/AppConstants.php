@@ -24,12 +24,10 @@ abstract class AppConstants
     ]; 
 
     static public $request_states = [
-        'RequestRecieved', 'RequestAccepted', 'RequestRejected', 'RequestCompleted',
-        'CampaignRequest', 
+        'RequestRecieved', 'RequestAccepted', 'RequestRejected', 'RequestCompleted' 
     ]; 
 
     static public $video_states = [
         'VideoRecieved', 'VideoAccepted', 'VideoRejected'
     ]; 
-    
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Brand\CampaignController;
 use App\Http\Controllers\Brand\CampaignRequestController;
+use App\Http\Controllers\Brand\RequestVideoController;
 use App\Http\Controllers\Creator\CreatorController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,3 +52,11 @@ Route::put('requests/{id}/toggleActive/{state}', [CampaignRequestController::cla
 Route::put('requests/{id}/updateStatus', [CampaignRequestController::class, 'updateStatus'])
 ->where(['id' => '[0-9]+']);
 // End::CampaignRequest ================================================================= //
+
+// Start::RequestVideo ================================================================= //
+Route::resource('requestvideos', RequestVideoController::class)->only(['edit', 'update', 'destroy']);
+Route::put('requestvideos/{id}/toggleActive/{state}', [RequestVideoController::class, 'toggleActive'])
+    ->where(['id' => '[0-9]+', 'state' => '0|1']);
+Route::put('requestvideos/{id}/updateStatus', [RequestVideoController::class, 'updateStatus'])
+->where(['id' => '[0-9]+']);
+// End::RequestVideo ================================================================= //

@@ -25,7 +25,7 @@ class CampaignRequestResource extends JsonResource
             'creator_id' => $this->creator_id,
             'explanation' => $this->explanation,
             'request_status' => $this->request_status,
-            'reject_reason' => $this->reject_reason, 
+            'request_reject_reason' => $this->request_reject_reason, 
 
             'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,

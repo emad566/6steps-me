@@ -20,8 +20,8 @@ return new class extends Migration
             $table->bigInteger('creator_id')->unsigned();
             $table->text('explanation', 1000);
             
-            $table->enum('campaign_status', AppConstants::$request_states)->default(AppConstants::$request_states['0']);
-            $table->text('reject_reason', 1000)->nullable();
+            $table->enum('request_status', AppConstants::$request_states)->default(AppConstants::$request_states['0']);
+            $table->text('request_reject_reason', 1000)->nullable();
 
  
             $table->timestamp('deleted_at')->nullable();

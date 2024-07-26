@@ -16,7 +16,7 @@ abstract class AppConstants
     ];
 
     static public $statusable_types = [
-        'Campaign', 'CampainRequest', 'RequestVideo',
+        'Campaign', 'CampaignRequest', 'RequestVideo',
     ]; 
 
     static public $campain_states = [
@@ -24,7 +24,8 @@ abstract class AppConstants
     ]; 
 
     static public $request_states = [
-        'RequestRecieved', 'RequestAccepted', 'RequestRejected', 'RequestCompleted', 'CampaignCompleted'
+        'RequestRecieved', 'RequestAccepted', 'RequestRejected', 'RequestCompleted',
+        'CampaignRequest', 
     ]; 
 
     static public $video_states = [

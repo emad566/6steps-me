@@ -89,7 +89,7 @@ class CampaignController extends BaseApiController
 
     public function store(Request $request)
     {
-        try {
+        // try {
             $brand_id_state = 'nullable';
             
             if(auth('admin')->check()){
@@ -100,7 +100,7 @@ class CampaignController extends BaseApiController
             }else{
                 return $this->sendResponse(false, null, 'You are not allowed to create campaign', null, 401);
             }
-
+ 
             $validator = Validator::make($request->all(), [
                 'brand_id' => $brand_id_state .'|exists:brands,brand_id',
                 'campaign_title' => 'required|min:10|max:190|unique:campaigns,campaign_title',
@@ -167,10 +167,9 @@ class CampaignController extends BaseApiController
             $item->cats()->sync($cat_ids); 
 
             $city_ids = City::withTrashed()->whereIn('city_name', $request->city_names)->pluck('city_id')->toArray();
-            $item->cities()->sync($city_ids);
-
+            $item->cities()->sync($city_ids); 
             Statusable::create([
-                'statusable_id' => $item->id,
+                'statusable_id' => $item->campaign_id,
                 'statusable_type' => 'Campaign',
                 'status' => 'UnderReview',
             ]);
@@ -180,10 +179,10 @@ class CampaignController extends BaseApiController
             return $this->sendResponse(true, [
                 'item' => new CampaignResource($item),
             ], trans('CampaignHasBeenCreated'));
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
+        // } catch (\Throwable $th) {
+        //     DB::rollBack();
+        //     return $this->sendResponse(false, null, trans('technicalError'), null, 500);
+        // }
     }
 
     function edit($id) {
@@ -259,7 +258,7 @@ class CampaignController extends BaseApiController
             $item->cities()->sync($city_ids);
 
             Statusable::create([
-                'statusable_id' => $item->id,
+                'statusable_id' => $item->campaign_id,
                 'statusable_type' => 'Campaign',
                 'status' => 'UnderReview',
             ]);
@@ -308,7 +307,7 @@ class CampaignController extends BaseApiController
             }
             
             Statusable::create([
-                'statusable_id' => $item->id,
+                'statusable_id' => $item->campaign_id,
                 'statusable_type' => 'Campaign',
                 'status' => $request->campaign_status,
                 'reason' => $request->reject_reason,

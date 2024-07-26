@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Brand\CampaignController;
 use App\Http\Controllers\Brand\BrandController;
+use App\Http\Controllers\Brand\CampaignRequestController;
+use App\Models\CampaignRequest;
 use Illuminate\Support\Facades\Route;
 
  
@@ -16,3 +18,10 @@ Route::resource('campaigns', CampaignController::class)->except(['destroy']);
 Route::put('campaigns/{id}/updateStatus', [CampaignController::class, 'updateStatus'])
 ->where(['id' => '[0-9]+']);
 // End::Campaign ================================================================= //
+
+// Start::CampaignRequest ================================================================= //
+Route::put('requests/{id}/updateStatus', [CampaignRequestController::class, 'updateStatus'])
+->where(['id' => '[0-9]+']);
+// End::CampaignRequest ================================================================= //
+
+

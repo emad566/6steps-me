@@ -13,7 +13,7 @@ trait IndexTrait
 
     function indexInit(Request $request, $callBack=null)
     {
-        try {
+        // try {
             $validator = Validator::make($request->all(), [
                 ...AppConstants::$listVaidations,
                 'sortColumn' => 'nullable|in:' . implode(',', $this->columns),
@@ -48,9 +48,9 @@ trait IndexTrait
 
             $items = $items->paginate($request->paginationCounter ?? AppConstants::$PerPage);
             return $this->sendResponse(true, data: ['items' => $this->resource::collection($items)->response()->getData(true)], message: trans('Listed'));
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
+        // } catch (\Throwable $th) {
+        //     return $this->sendResponse(false, null, trans('technicalError'), null, 500);
+        // }
     }
 
     public function show($id)

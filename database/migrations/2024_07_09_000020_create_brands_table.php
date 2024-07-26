@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Brand;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -30,7 +31,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-        });
+        }); 
     }
 
     /**

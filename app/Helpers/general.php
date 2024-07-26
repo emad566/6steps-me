@@ -2,11 +2,15 @@
 
 use App\Models\AccessToken;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Kutia\Larafirebase\Facades\Larafirebase;
 use Illuminate\Support\Facades\Storage;
 
-
+function Authed() : AuthService {
+    return new AuthService();
+} 
 
 function generateRandomPassword($length = 8)
 {
@@ -229,10 +233,23 @@ if (!function_exists('uploadToStorage')) {
 
         $name = sha1(time() . $file->getClientOriginalName());
         $extension = $file->getClientOriginalExtension();
-
         $fileName = "{$name}.{$extension}";
 
-        Storage::disk('local')->putFileAs($baseDir, $file, $fileName, 'public');
+        $fullPath = storage_path('app/' . $baseDir);
+        
+        try {
+            if (!File::exists($fullPath)) {
+                File::makeDirectory($fullPath, 0755, true); 
+            }
+
+            Storage::disk('public')->putFileAs($path, $file, $fileName);
+
+            chmod($fullPath . '/' . $fileName, 0755);
+            
+        } catch (\Exception $e) {
+            Log::error('File upload failed: ' . $e->getMessage());
+            return response()->json(['error' => 'File upload failed.'], 500);
+        }
 
         return [
             'relativePath' => "{$path}/{$fileName}",

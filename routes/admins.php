@@ -4,7 +4,8 @@ use App\Http\Controllers\Admin\CatController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Brand\CampaignController;
-use App\Http\Controllers\Creator\CreatorController; 
+use App\Http\Controllers\Brand\CampaignRequestController;
+use App\Http\Controllers\Creator\CreatorController;
 use Illuminate\Support\Facades\Route;
 
 // Start::Category ===============================================//
@@ -42,3 +43,11 @@ Route::put('campaigns/{id}/updateStatus', [CampaignController::class, 'updateSta
 ->where(['id' => '[0-9]+']);
 // End::Campaign ================================================================= //
 
+
+// Start::CampaignRequest ================================================================= //
+Route::resource('requests', CampaignRequestController::class)->only(['edit', 'update', 'destroy']);
+Route::put('requests/{id}/toggleActive/{state}', [CampaignRequestController::class, 'toggleActive'])
+    ->where(['id' => '[0-9]+', 'state' => '0|1']);
+Route::put('requests/{id}/updateStatus', [CampaignRequestController::class, 'updateStatus'])
+->where(['id' => '[0-9]+']);
+// End::CampaignRequest ================================================================= //

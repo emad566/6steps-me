@@ -23,5 +23,6 @@
     "Complete": "مكتمل",
     "Stoped": "متوقف",
     "Ended": "منتهي",
-    "CampaignHasBeenCreated": "تم انشاء الحملة بنجاح"
+    "CampaignHasBeenCreated": "تم انشاء الحملة بنجاح",
+    "YouMustUpdateTheExplanation": "يجب عليك تحديث الطلب"
 }

@@ -25,6 +25,7 @@
     "Complete": "Complete", 
     "Stoped": "Stoped", 
     "Ended": "Ended",
-    "CampaignHasBeenCreated": "Campaign has been created"
+    "CampaignHasBeenCreated": "Campaign has been created",
+    "YouMustUpdateTheExplanation": "You must update the explanation"
 
 }

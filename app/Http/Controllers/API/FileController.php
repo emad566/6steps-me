@@ -16,7 +16,7 @@ class FileController extends BaseApiController
     public function uploadFile(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'file' => 'required|file|mimes:jpeg,bmp,png,pdf,xlsx,docx,mp4,avi,flv|max:516',
+            'file' => 'required|file|mimes:jpeg,bmp,png,pdf,xlsx,docx,mp4,avi,flv|max:10240',
             'path' => 'required|min:3|max:190',
             'old_file' => 'nullable|min:3|max:190',
         ]);

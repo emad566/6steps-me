@@ -18,7 +18,7 @@ class CampaignRequest extends Model
      *
      * @var array<int, string>
      */
-    protected $table = 'campaign_request';
+    protected $table = 'campaign_requests';
     protected $primaryKey = 'request_id'; 
 
     protected $fillable = [
@@ -29,7 +29,7 @@ class CampaignRequest extends Model
         'creator_id',
         'explanation',
         'request_status',
-        'reject_reason',
+        'request_reject_reason',
 
         'deleted_at',
         'created_at',

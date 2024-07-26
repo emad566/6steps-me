@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Traits\CreatedUpdatedFormat;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -50,6 +51,37 @@ class Campaign extends Model
         'updated_at',
     ];
 
+    
+    public function getStartAtAttribute($value)
+    {
+        if (!$value) return $value;  
+        return Carbon::parse($value)->setTimezone('UTC'); 
+    }
+
+    public function getCloseAtAttribute($value)
+    {
+        if (!$value) return $value;  
+        return Carbon::parse($value)->setTimezone('UTC'); 
+    }
+    
+    public function setStartAtAttribute($value)
+    { 
+        if ($value) {
+            $this->attributes['start_at'] = Carbon::parse($value)->setTimezone('UTC')->format('Y-m-d H:i:s');
+        } else {
+            $this->attributes['start_at'] = null; 
+        } 
+    }
+
+    public function setCloseAtAttribute($value)
+    { 
+        if ($value) {
+            $this->attributes['close_at'] = Carbon::parse($value)->setTimezone('UTC')->format('Y-m-d H:i:s');
+        } else {
+            $this->attributes['close_at'] = null; 
+        } 
+    }
+
     public function getProductImageAttribute($value)
     {
         return $value? asset('storage/' . $value) : '';
@@ -74,4 +106,5 @@ class Campaign extends Model
     {
         return $this->hasMany(Statusable::class, 'statusable_id', 'campaign_id')->where('statusable_type', 'Campaign');
     }
+
 }

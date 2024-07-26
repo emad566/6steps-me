@@ -135,6 +135,7 @@ class BrandController extends BaseApiController
                 'brand_name' => 'required|min:3|max:60|unique:brands,brand_name,' . $id . ',brand_id',
                 'email' => $requiredEmail . '|email|unique:brands,email,' . $id . ',brand_id',
                 'logo' => 'required|min:5|max:190',
+                'mobile' => 'required|sa_mobile',
                 'website_url' => 'nullable|url|min:5|max:190',
                 'description' => 'required|min:5|max:200',
                 'address' => 'required|min:5|max:190',
@@ -155,14 +156,15 @@ class BrandController extends BaseApiController
             $item->update([ 
                 'brand_name' => $request->brand_name,
                 'email' =>$email,
+                'mobile' =>$request->mobile,
                 'logo' => $request->logo,
                 'website_url' => $request->website_url,
-                'description' => $request->description,
+                'description' => $request->description, 
                 'address' => $request->address,
                 'branches_no' => $request->branches_no,
                 'tax_no' => $request->tax_no,
                 'cr_no' => $request->cr_no,
-            ]);
+            ]); 
 
             $cat_ids = Cat::withTrashed()->whereIn('cat_name', $request->cat_names)->pluck('cat_id')->toArray();
             $item->cats()->sync($cat_ids);

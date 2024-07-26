@@ -18,8 +18,8 @@ return new class extends Migration
             $table->bigInteger('brand_id')->unsigned();
             $table->string('campaign_title');
             $table->text('campaign_description', 1000);
-            $table->string('start_at'); 
-            $table->string('close_at');
+            $table->timestamp('start_at')->nullable();
+            $table->timestamp('close_at')->nullable(); 
             $table->text('conditions', 1000);
             $table->string('product_image');
             $table->integer('ugc_no');

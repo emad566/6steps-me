@@ -12,7 +12,7 @@ class CityFactory extends Factory
     public function definition()
     {
         return [
-            'city_name' => $this->faker->city(), // Generates a random city name
+            'city_name' => $this->faker->unique()->city(), // Generates a random city name
             'country_name' => 'Saudi Arabia', // Generates a random country name
             
             // Timestamps are managed by Eloquent automatically

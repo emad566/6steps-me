@@ -15,7 +15,7 @@ class BrandFactory extends Factory
         $image =  new ImageCreationService();
 
         return [
-            'brand_name'        => $this->faker->company,
+            'brand_name'        => $this->faker->unique()->company,
             'mobile'            => generateSaudiMobileNumber($this->faker),
             'email'             => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),

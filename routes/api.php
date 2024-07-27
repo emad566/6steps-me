@@ -16,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+Route::get('id', function () {
+    return public_path('/arial.ttf'); 
+}); 
 
 Route::group(['prefix' => 'admin'], function () {
     Route::post('login', [AdminAuthController::class, 'login']);

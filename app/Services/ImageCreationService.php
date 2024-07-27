@@ -37,7 +37,7 @@ class ImageCreationService
         $fileName = strtolower($imageCategory) . '-' . generateRandomStringId(1) . '.png';
         $fullLocalPath = $localPath . '/' . $fileName;
 
-        $fontPath  = public_path('\arial.ttf'); 
+        $fontPath  = public_path('arial.ttf'); 
         $fontSize = 60;
         $angle = 0;
         $text = $imageCategory;

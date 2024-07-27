@@ -27,20 +27,20 @@ class DatabaseSeeder extends Seeder
         Creator::factory()
         ->has(CreatorSamplevideo::factory()->count(random_int(1,3)), 'sampleVideos')
         ->has(Cat::factory()->count(random_int(1,3)), 'cats')
-        ->count(2)
+        ->count(10)
         ->create();
 
         Brand::factory()->has(Campaign::factory()
             ->has(CampaignRequest::factory()
-                ->has(RequestVideo::factory()->count(3), 'videos')
-                ->count(2)
+                ->has(RequestVideo::factory()->count(random_int(1,3)), 'videos')
+                ->count(random_int(1,10))
             , 'requests')
             ->has(Cat::factory()->count(random_int(1,3)), 'cats')
             ->has(City::factory()->count(random_int(1,3)), 'cities')
-            ->count(2)
+            ->count(random_int(1,15))
         , 'campaigns')
         ->has(Cat::factory()->count(random_int(1,3)), 'cats')
-        ->count(2)
+        ->count(15)
         ->create();
     }
 

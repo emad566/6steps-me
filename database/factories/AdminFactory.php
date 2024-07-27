@@ -14,7 +14,7 @@ class AdminFactory extends Factory
     {
         $image =  new ImageCreationService();
         return [
-            'admin_name' => $this->faker->name,
+            'admin_name' => $this->faker->unique()->name,
             'email' => $this->faker->unique()->safeEmail,
             'mobile' => generateSaudiMobileNumber($this->faker),
             'logo' => $image->createImage($this->faker->name, 'Admin'),

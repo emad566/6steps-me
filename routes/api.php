@@ -1,10 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminAuthController;
-use App\Http\Controllers\API\FileController;
+use App\Http\Controllers\Admin\AdminAuthController; 
 use App\Http\Controllers\Brand\BrandAuthController;
-use App\Http\Controllers\Creator\CreatorAuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Creator\CreatorAuthController; 
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+
 
 Route::group(['prefix' => 'admin'], function () {
     Route::post('login', [AdminAuthController::class, 'login']);

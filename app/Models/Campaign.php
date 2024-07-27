@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Traits\CreatedUpdatedFormat;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Campaign extends Model
 {
-    use SoftDeletes, CreatedUpdatedFormat;
+    use SoftDeletes, CreatedUpdatedFormat, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -51,7 +52,11 @@ class Campaign extends Model
         'updated_at',
     ];
 
-    
+    public function requests()
+    {
+        return $this->hasMany(CampaignRequest::class, 'request_id', 'request_id');
+    }
+
     public function getStartAtAttribute($value)
     {
         if (!$value) return $value;  

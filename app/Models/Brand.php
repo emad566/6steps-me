@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Http\Traits\CreatedUpdatedFormat;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,7 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Brand extends Authenticatable
 {
-    use HasApiTokens, SoftDeletes, CreatedUpdatedFormat, Notifiable;
+    use HasApiTokens, SoftDeletes, CreatedUpdatedFormat, Notifiable, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -73,6 +75,10 @@ class Brand extends Authenticatable
     public function getLogoAttribute($value)
     {
         return $value? asset('storage/' . $value) : '';
+    }
+
+    public function isCompleteProfile() {
+        return $this->address? true : false;
     }
 
     public function cats(): MorphToMany

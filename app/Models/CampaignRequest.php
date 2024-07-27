@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use App\Http\Traits\CreatedUpdatedFormat;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Symfony\Component\HttpFoundation\Request;
 
 class CampaignRequest extends Model
 {
-    use SoftDeletes, CreatedUpdatedFormat;
+    use SoftDeletes, CreatedUpdatedFormat, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -35,6 +37,11 @@ class CampaignRequest extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function videos(): HasMany
+    {
+        return $this->hasMany(RequestVideo::class, 'request_id', 'request_id');
+    }
 
     public function campaign(): HasOne
     {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Admin;
+use App\Services\ImageCreationService;
 use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -27,7 +28,8 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
-
+        
+        $image =  new ImageCreationService();
 
         Admin::create([
             'email' => 'admin@6stepsa.com',
@@ -42,8 +44,9 @@ return new class extends Migration
                 'email' => "admin$i@6stepsa.com",
                 'password' => '123456',
                 'mobile' => '96623355508'.$i,
-                'admin_name' => '6stepsa',
+                'admin_name' => '6stepsa' . $i,
                 'email_verified_at' => Carbon::now(),
+                'logo' => $image->createImage('6stepsa' . $i, 'Admin')
             ]);
         }
          

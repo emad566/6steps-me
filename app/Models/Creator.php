@@ -17,7 +17,7 @@ use Illuminate\Support\Carbon;
 
 class Creator extends Authenticatable
 {
-    use HasApiTokens, SoftDeletes, Notifiable, CreatedUpdatedFormat;
+    use HasApiTokens, SoftDeletes, Notifiable, CreatedUpdatedFormat, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -78,6 +78,10 @@ class Creator extends Authenticatable
         return $value? asset('storage/' . $value) : '';
     }
 
+    public function isCompleteProfile() {
+        return $this->address? true : false;
+    }
+    
     public function sampleVideos(): HasMany
     {
         return $this->hasMany(CreatorSamplevideo::class, 'creator_id', 'creator_id');

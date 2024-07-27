@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CatController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Brand\BrandController;
@@ -20,6 +21,15 @@ Route::resource('cities', CityController::class);
 Route::put('cities/{id}/toggleActive/{state}', [CityController::class, 'toggleActive'])
     ->where(['id' => '[0-9]+', 'state' => '0|1']);
 // En::City ===============================================//
+
+// Start::Admin ===================================================== //
+Route::resource('admins', AdminController::class);
+Route::put('admins/{id}/samplevideos', [AdminController::class, 'samplevideos'])
+    ->where(['id' => '[0-9]+']);
+Route::put('admins/{id}/toggleActive/{state}', [AdminController::class, 'toggleActive'])
+    ->where(['id' => '[0-9]+', 'state' => '0|1']);
+// End::Admin ===================================================== //
+
 
 // Start::Creator ===================================================== //
 Route::resource('creators', CreatorController::class);

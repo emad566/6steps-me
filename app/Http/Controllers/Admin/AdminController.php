@@ -105,31 +105,29 @@ class AdminController extends BaseApiController
     public function update(Request $request, $id)
     { 
         try {
-            $validator = Validator::make([...$request->all(), 'id' => $id], [
-                'id' => 'required|exists:admins,admin_id',
+            $validator = Validator::make([...$request->all(), $this->columns[0] => $id], [
+                $this->columns[0] => 'required|exists:' . $this->table . ',' . $this->columns[0],  
                 'admin_name' => 'required|min:5|max:60|unique:admins,admin_name,' . $id . ',admin_id',
                 'email' => 'required|min:5|max:60|unique:creators,email,' . $id . ',creator_id',
                 'logo' => 'required|min:5|max:190',
                 'mobile' => 'required|sa_mobile|unique:admins,admin_name',
                 'logo' => 'nullable|min:5|max:190', 
                 'address' => 'nullable|min:5|max:190',
-                'websit_url' => 'nullable|url|min:5|max:190', 
-                'password' => 'required|min:8|max:12',
+                'websit_url' => 'nullable|url|min:5|max:190',  
             ]);
 
             $check = $this->checkValidator($validator);
             if ($check) return $check;
  
-
+            $item = Admin::findOrFail($id);
             DB::beginTransaction();
-            $item = Admin::create([
+            $item->update([
                 'admin_name' => $request->admin_name,
                 'email' => $request->email,
                 'mobile' => $request->mobile,
                 'logo' => $request->logo,
                 'address' => $request->address,
-                'websit_url' => $request->websit_url,
-                'password' => $request->password,
+                'websit_url' => $request->websit_url, 
             ]); 
             DB::commit();
 

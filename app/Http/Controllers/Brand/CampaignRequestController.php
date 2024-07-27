@@ -91,11 +91,16 @@ class CampaignRequestController extends BaseApiController
             if ($check) return $check;
 
             $campaign = Campaign::where('campaign_id', $request->campaign_id)
-                ->where('campaign_status', 'Active')->first();   
+                ->where('campaign_status', 'Active')->first(); 
+                  
             if(!$campaign){
                 return $this->sendResponse(false, null, 'This is not active campaign!', null, 401);
             }
             
+            if(!Auth()->user()->isCompleteProfile()){
+                return $this->sendResponse(false, null, 'Please complete your profile firstly!', null, 401);
+            }
+
             $campaignRequest = CampaignRequest::where('campaign_id', $request->campaign_id)
                 ->where('creator_id', Auth()->user()->creator_id)->first(); 
             if($campaignRequest){

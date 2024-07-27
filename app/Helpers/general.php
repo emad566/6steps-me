@@ -12,6 +12,16 @@ function Authed() : AuthService {
     return new AuthService();
 } 
 
+function generateSaudiMobileNumber($faker) {
+    // Start with the Saudi country code
+    $countryCode = '966';
+
+    // Generate a random mobile number starting with 5
+    $mobileNumber = '5' . $faker->numerify('########'); // Generates a 9 digit number
+
+    return $countryCode . $mobileNumber; // Return the full number
+}
+
 function generateRandomPassword($length = 8)
 {
     $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-=+;:,.?";

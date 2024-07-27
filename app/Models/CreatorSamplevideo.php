@@ -5,11 +5,12 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Http\Traits\CreatedUpdatedFormat;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model; 
 
 class CreatorSamplevideo extends Model
 {
-    use CreatedUpdatedFormat;
+    use CreatedUpdatedFormat, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -24,9 +25,7 @@ class CreatorSamplevideo extends Model
         'video_url',
         'video_order_no',
         'video_image_path',
-        'video_description',
-
-
+        'video_description', 
     ];
 
     protected $hidden = [

@@ -10,6 +10,7 @@ use App\Http\Traits\IndexTrait;
 use App\Http\Traits\ShowTrait;
 use App\Http\Traits\ToggleActiveTrait;
 use App\Models\AppConstants;
+use App\Models\Brand;
 use App\Models\Campaign;
 use App\Models\Cat;
 use App\Models\City;
@@ -59,7 +60,7 @@ class CampaignController extends BaseApiController
         'updated_at',
     ];
 
-    function index(Request $request) {
+    function index(Request $request) { 
         return $this->indexInit($request, function ($items) {
             if (!auth('admin')->check()) {
                 if(auth('creator')->check()){
@@ -145,7 +146,11 @@ class CampaignController extends BaseApiController
             $check = $this->checkValidator($validator);
             if ($check) return $check;
 
-            
+            $brand = Brand::find($brand_id);
+
+            if(!$brand->isCompleteProfile()){
+                return $this->sendResponse(false, null, 'Please complete your profile firstly!', null, 401);
+            }
 
             $campaignCode = Str::random(8); 
             

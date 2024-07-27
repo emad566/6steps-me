@@ -5,12 +5,13 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Http\Traits\CreatedUpdatedFormat;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class City extends Model
 {
-    use SoftDeletes, CreatedUpdatedFormat;
+    use SoftDeletes, CreatedUpdatedFormat, HasFactory;
 
     /**
      * The attributes that are mass assignable.

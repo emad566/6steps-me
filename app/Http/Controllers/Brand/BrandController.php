@@ -135,7 +135,7 @@ class BrandController extends BaseApiController
                 'brand_name' => 'required|min:3|max:60|unique:brands,brand_name,' . $id . ',brand_id',
                 'email' => $requiredEmail . '|email|unique:brands,email,' . $id . ',brand_id',
                 'logo' => 'required|min:5|max:190',
-                'mobile' => 'required|sa_mobile',
+                'mobile' => 'nullable|sa_mobile',
                 'website_url' => 'nullable|url|min:5|max:190',
                 'description' => 'required|min:5|max:200',
                 'address' => 'required|min:5|max:190',

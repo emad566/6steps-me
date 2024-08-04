@@ -132,7 +132,7 @@ class RequestVideoController extends BaseApiController
                 'brand_id' => $campaignRequest->brand_id,
                 'creator_id' => Auth()->user()->creator_id,
                 'video_url' => $request->video_url,
-                'video_image_path' => $request->video_image_path,
+                'video_image_path' => getRelative($request->video_image_path),
                 'video_description' => $request->video_description,
                 'video_status' => AppConstants::$video_states[0]
             ]); 
@@ -203,7 +203,7 @@ class RequestVideoController extends BaseApiController
             DB::beginTransaction();
             $item->update([ 
                 'video_url' => $request->video_url,
-                'video_image_path' => $request->video_image_path,
+                ''video_image_path' => getRelative($request->video_image_path),
                 'video_description' => $request->video_description,
                 'video_status' => AppConstants::$video_states[0]
             ]); 

@@ -75,7 +75,10 @@ class Creator extends Authenticatable
 
     public function getLogoAttribute($value)
     {
-        return $value? asset('storage/' . $value) : '';
+        if (filter_var($value, FILTER_VALIDATE_URL)) {
+            return $value;
+        } 
+        return $value ? asset('storage/' . $value) : '';
     }
 
     public function isCompleteProfile() {

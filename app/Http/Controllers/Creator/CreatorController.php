@@ -96,7 +96,7 @@ class CreatorController extends BaseApiController
             $creator = Creator::create([
                 'mobile' => $request->mobile,
                 'creator_name' => $request->creator_name,
-                'logo' => $request->logo,
+                'logo' => getRelative($request->logo),
                 'bio' => $request->bio,
                 'address' => $request->address,
                 'birth_date' => $request->birth_date,
@@ -154,7 +154,7 @@ class CreatorController extends BaseApiController
             $creator->update([
                 'creator_name' => $request->creator_name,
                 'mobile' => $mobile,
-                'logo' => $request->logo,
+                'logo' => getRelative($request->logo),
                 'bio' => $request->bio,
                 'address' => $request->address,
                 'birth_date' => $request->birth_date,
@@ -183,7 +183,7 @@ class CreatorController extends BaseApiController
     }
     
     function samplevideos(Request $request, $id) {
-        try {
+        // try {
             if (auth()->user()->creator_id != $id && !auth('admin')->check()) {
                 return $this->sendResponse(false, [], "You are not admin user", null, 400);
             }
@@ -201,18 +201,26 @@ class CreatorController extends BaseApiController
             if ($check) return $check;
             $creator = Creator::withTrashed()->where('creator_id', $id)->first();
 
-
+            $sampleVideos = [];
+            foreach ($request->sampleVideos as $sampleVideo ) { 
+                $sampleVideos[] = [ 
+                    'video_url' => $sampleVideo['video_url']?? null,
+                    'video_order_no' => $sampleVideo['video_order_no']?? null,
+                    'video_image_path' => getRelative($sampleVideo['video_image_path']?? null),
+                    'video_description' => $sampleVideo['video_description']?? null,
+                ];
+            }
             DB::beginTransaction();
             $creator->sampleVideos()->delete();
-            $creator->sampleVideos()->createMany($request->sampleVideos);
+            $creator->sampleVideos()->createMany($sampleVideos);
  
             DB::commit();
 
             return $this->sendResponse(true, [
                 'item' => new  CreatorResource($creator),
             ], trans('successfullUpdate'), null);
-        } catch (\Throwable $th) {
-            return $this->sendResponse(false, null, trans('technicalError'), null, 500);
-        }
-    } 
-}
+        // } catch (\Throwable $th) {
+        //     return $this->sendResponse(false, null, trans('technicalError'), null, 500);
+        // }
+    }  
+} 

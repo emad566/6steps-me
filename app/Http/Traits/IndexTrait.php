@@ -7,6 +7,7 @@ use App\Models\AppConstants;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 trait IndexTrait
 {
@@ -32,11 +33,12 @@ trait IndexTrait
             
             
 
-            foreach ($this->columns as $colum) {
-                if ($request->$colum) {
-                    $items = $items->search($colum, $request->$colum);
+            foreach ($this->columns as $column) {
+                if ($request->$column) {
+                    $where = Str::contains($column, '_id')? 'where' : 'search';
+                    $items = $items->$where($column, $request->$column);
                 }
-            }
+            }  
 
             if ($request->dateFrom) {
                 $items =  $items->where('created_at', '>=', Carbon::parse($request->dateFrom));

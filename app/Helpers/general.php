@@ -12,6 +12,10 @@ function Authed() : AuthService {
     return new AuthService();
 } 
 
+function getRelative($path){
+    return str_replace( 'https://' . request()->getHost() . '/storage/' , '', $path);
+}
+
 function generateSaudiMobileNumber($faker) {
     // Start with the Saudi country code
     $countryCode = '966';

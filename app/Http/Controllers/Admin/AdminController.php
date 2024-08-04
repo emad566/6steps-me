@@ -83,7 +83,7 @@ class AdminController extends BaseApiController
                 'admin_name' => $request->admin_name,
                 'email' => $request->email,
                 'mobile' => $request->mobile,
-                'logo' => $request->logo,
+                'logo' => getRelative($request->logo),
                 'address' => $request->address,
                 'websit_url' => $request->websit_url,
                 'password' => $request->password,
@@ -125,7 +125,7 @@ class AdminController extends BaseApiController
                 'admin_name' => $request->admin_name,
                 'email' => $request->email,
                 'mobile' => $request->mobile,
-                'logo' => $request->logo,
+                'logo' => getRelative($request->logo),
                 'address' => $request->address,
                 'websit_url' => $request->websit_url, 
             ]); 

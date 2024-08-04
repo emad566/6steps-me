@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return 'Welcom 6stepsa.com';
+Route::get('/ttt', function () {
+    return 'https://' . request()->getHost() . '/storage/' ;
 });
